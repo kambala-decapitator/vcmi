@@ -82,10 +82,6 @@ static_assert(sizeof(bool) == 1, "Bool needs to be 1 byte in size.");
 #  error "VCMI supports only Windows, OSX, Linux and Android targets"
 #endif
 
-#ifdef VCMI_IOS
-#  error "iOS system isn't yet supported."
-#endif
-
 // Each compiler uses own way to supress fall through warning. Try to find it.
 #ifdef __has_cpp_attribute
 #  if __has_cpp_attribute(fallthrough)
@@ -728,6 +724,8 @@ namespace vstd
 
 	using boost::math::round;
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-function"
 	static std::pair<std::string, std::string> splitStringToPair(std::string input, char separator)
 	{
 		std::pair<std::string, std::string> ret;
@@ -745,6 +743,7 @@ namespace vstd
 		}
 		return ret;
 	}
+#pragma clang diagnostic pop
 }
 using vstd::operator-=;
 using vstd::make_unique;

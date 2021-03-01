@@ -34,7 +34,7 @@
 # (To distribute this file outside of CMake, substitute the full
 #  License text for the above reference.)
 
-if (NOT WIN32)
+if (NOT WIN32 AND NOT APPLE_IOS)
     find_package(PkgConfig)
     if (PKG_CONFIG_FOUND)
         pkg_check_modules(_SDL2_TTF SDL2_ttf)
