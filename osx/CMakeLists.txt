@@ -1,6 +1,6 @@
 # We need to keep this code into separate directory so CMake will execute it after all other subdirectories install code
 # Otherwise we can't fix Mac bundle dependencies since binaries wouldn't be there when this code executed
-if(APPLE)
+if(APPLE_MACOS)
 	if(ENABLE_LAUNCHER)
 		find_program(TOOL_MACDEPLOYQT NAMES macdeployqt PATHS ${qt_base_dir}/bin)
 		if(NOT TOOL_MACDEPLOYQT)
@@ -22,7 +22,7 @@ if(APPLE)
 		execute_process(COMMAND ${CMAKE_INSTALL_NAME_TOOL} -change \"libvcmi.dylib\" \"@executable_path/../Frameworks/libvcmi.dylib\" \"\${CMAKE_INSTALL_PREFIX}/${APP_BUNDLE_BINARY_DIR}/AI/libVCAI.dylib\")
 		execute_process(COMMAND rm \"\${CMAKE_INSTALL_PREFIX}/${APP_BUNDLE_BINARY_DIR}/libvcmi.dylib\")
 	" COMPONENT Runtime)
-endif(APPLE)
+endif(APPLE_MACOS)
 
 # This will likely only work for Vcpkg
 if(WIN32)

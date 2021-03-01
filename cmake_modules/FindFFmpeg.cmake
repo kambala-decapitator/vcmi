@@ -14,6 +14,7 @@
 #   - AVUTIL
 #   - POSTPROCESS
 #   - SWSCALE
+#   - SWRESAMPLE
 # the following variables will be defined
 #  <component>_FOUND        - System has <component>
 #  <component>_INCLUDE_DIRS - Include directory necessary for using the <component> headers
@@ -32,7 +33,7 @@ include(FindPackageHandleStandardArgs)
 
 # The default components were taken from a survey over other FindFFMPEG.cmake files
 if (NOT FFmpeg_FIND_COMPONENTS)
-  set(FFmpeg_FIND_COMPONENTS AVCODEC AVFORMAT AVUTIL SWSCALE)
+  set(FFmpeg_FIND_COMPONENTS AVCODEC AVFORMAT AVUTIL SWSCALE SWRESAMPLE)
 endif ()
 
 if(MSVC)
@@ -65,7 +66,7 @@ endmacro()
 #
 macro(find_component _component _pkgconfig _library _header)
 
-  if (NOT WIN32)
+  if (NOT WIN32 AND NOT APPLE_IOS)
      # use pkg-config to get the directories and then use these values
      # in the FIND_PATH() and FIND_LIBRARY() calls
      find_package(PkgConfig)
@@ -114,6 +115,7 @@ if (NOT FFMPEG_LIBRARIES)
   find_component(AVUTIL   libavutil   avutil   libavutil/avutil.h)
   find_component(SWSCALE  libswscale  swscale  libswscale/swscale.h)
   find_component(POSTPROC libpostproc postproc libpostproc/postprocess.h)
+  find_component(SWRESAMPLE libswresample swresample libswresample/swresample.h)
 
   # Check if the required components were found and add their stuff to the FFMPEG_* vars.
   foreach (_component ${FFmpeg_FIND_COMPONENTS})
@@ -144,7 +146,7 @@ if (NOT FFMPEG_LIBRARIES)
 endif ()
 
 # Now set the noncached _FOUND vars for the components.
-foreach (_component AVCODEC AVDEVICE AVFORMAT AVUTIL POSTPROCESS SWSCALE)
+foreach (_component AVCODEC AVDEVICE AVFORMAT AVUTIL POSTPROCESS SWSCALE SWRESAMPLE)
   set_component_found(${_component})
 endforeach ()
 
@@ -156,7 +158,12 @@ endforeach ()
 
 # On OS X we ffmpeg libraries depend on VideoDecodeAcceleration and CoreVideo frameworks
 IF (APPLE)
-	SET(FFMPEG_EXTRA_LINKING_OPTIONS "-framework VideoDecodeAcceleration -framework CoreVideo -lbz2")
+	SET(FFMPEG_EXTRA_LINKING_OPTIONS "-framework CoreVideo -lbz2")
+  IF(APPLE_MACOS)
+  	SET(FFMPEG_EXTRA_LINKING_OPTIONS "${FFMPEG_EXTRA_LINKING_OPTIONS} -framework VideoDecodeAcceleration")
+  ELSE()
+  	SET(FFMPEG_EXTRA_LINKING_OPTIONS "${FFMPEG_EXTRA_LINKING_OPTIONS} -framework AudioToolbox -framework CoreMedia -framework VideoToolbox")
+  ENDIF()
 ENDIF()
 
 # Give a nice error message if some of the required vars are missing.

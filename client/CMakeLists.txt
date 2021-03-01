@@ -148,8 +148,10 @@ if(ANDROID) # android needs client/server to be libraries, not executables, so w
 	return()
 endif()
 
-if(APPLE)
+if(APPLE_MACOS)
 	set(client_SRCS ${client_SRCS} SDLMain.m)
+elseif(APPLE_IOS)
+	set(client_SRCS ${client_SRCS} main_ios.m)
 elseif(WIN32)
 	set(client_ICON "VCMI_client.rc")
 endif()
@@ -171,6 +173,11 @@ if(WIN32)
 	if(NOT ENABLE_DEBUG_CONSOLE)
 		target_link_libraries(vcmiclient ${SDLMAIN_LIBRARY})
 	endif()
+elseif(APPLE_IOS)
+	target_link_libraries(vcmiclient PRIVATE
+    "-framework UIKit"
+    "-framework QuartzCore -framework CoreGraphics -framework CoreServices -framework ImageIO" # SDL2_image
+  )
 endif()
 
 target_link_libraries(vcmiclient PRIVATE
@@ -179,12 +186,12 @@ target_link_libraries(vcmiclient PRIVATE
 )
 
 target_include_directories(vcmi
-	PUBLIC	${CMAKE_CURRENT_SOURCE_DIR}
-	PUBLIC	${SDL2_INCLUDE_DIR}
-	PRIVATE ${SDL2_TTF_INCLUDE_DIR}
-	PRIVATE ${SDL2_MIXER_INCLUDE_DIR}
-	PRIVATE ${SDL2_IMAGE_INCLUDE_DIR}
-	PRIVATE ${FFMPEG_INCLUDE_DIRS}
+	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+	PUBLIC ${SDL2_INCLUDE_DIR}
+  PUBLIC ${SDL2_TTF_INCLUDE_DIR}
+  PUBLIC ${SDL2_MIXER_INCLUDE_DIR}
+  PUBLIC ${SDL2_IMAGE_INCLUDE_DIR}
+  PUBLIC ${FFMPEG_INCLUDE_DIRS}
 )
 
 vcmi_set_output_dir(vcmiclient "")

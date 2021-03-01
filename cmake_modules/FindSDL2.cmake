@@ -78,7 +78,7 @@
 # (To distribute this file outside of CMake, substitute the full
 #  License text for the above reference.)
 
-if (NOT WIN32)
+if (NOT WIN32 AND NOT APPLE_IOS)
     find_package(PkgConfig)
     if (PKG_CONFIG_FOUND)
         pkg_check_modules(_SDL2 sdl2)
@@ -168,7 +168,7 @@ if(SDL2_LIBRARY_TEMP)
   # I think it has something to do with the CACHE STRING.
   # So I use a temporary variable until the end so I can set the
   # "real" variable in one-shot.
-  if(APPLE)
+  if(APPLE_MACOS)
     set(SDL2_LIBRARY_TEMP ${SDL2_LIBRARY_TEMP} "-framework Cocoa")
   endif()
 
