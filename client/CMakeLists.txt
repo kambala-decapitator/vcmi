@@ -175,8 +175,8 @@ if(WIN32)
 	endif()
 elseif(APPLE_IOS)
 	target_link_libraries(vcmiclient PRIVATE
-    "-framework QuartzCore -framework CoreGraphics -framework CoreServices -framework ImageIO" # SDL2_image
-  )
+		"-framework QuartzCore -framework CoreGraphics -framework CoreServices -framework ImageIO" # SDL2_image
+	)
 endif()
 
 target_link_libraries(vcmiclient PRIVATE
@@ -187,10 +187,10 @@ target_link_libraries(vcmiclient PRIVATE
 target_include_directories(vcmi
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
 	PUBLIC ${SDL2_INCLUDE_DIR}
-  PUBLIC ${SDL2_TTF_INCLUDE_DIR}
-  PUBLIC ${SDL2_MIXER_INCLUDE_DIR}
-  PUBLIC ${SDL2_IMAGE_INCLUDE_DIR}
-  PUBLIC ${FFMPEG_INCLUDE_DIRS}
+	PUBLIC ${SDL2_TTF_INCLUDE_DIR}
+	PUBLIC ${SDL2_MIXER_INCLUDE_DIR}
+	PUBLIC ${SDL2_IMAGE_INCLUDE_DIR}
+	PUBLIC ${FFMPEG_INCLUDE_DIRS}
 )
 
 vcmi_set_output_dir(vcmiclient "")

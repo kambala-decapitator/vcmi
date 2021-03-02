@@ -30,11 +30,11 @@ project(VCMI)
 # - Make FindFuzzyLite check for the right version and disable FORCE_BUNDLED_FL by default
 
 if(APPLE)
-  if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
-    set(APPLE_MACOS 1)
-  else()
-    set(APPLE_IOS 1)
-  endif()
+	if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+		set(APPLE_MACOS 1)
+	else()
+		set(APPLE_IOS 1)
+	endif()
 endif(APPLE)
 
 ############################################
@@ -54,7 +54,7 @@ set(VCMI_VERSION_PATCH 0)
 
 option(ENABLE_ERM "Enable compilation of ERM scripting module" OFF)
 if(NOT APPLE_IOS)
-  option(ENABLE_LAUNCHER "Enable compilation of launcher" ON)
+	option(ENABLE_LAUNCHER "Enable compilation of launcher" ON)
 endif()
 option(ENABLE_TEST "Enable compilation of unit tests" ON)
 option(ENABLE_PCH "Enable compilation using precompiled headers" ON)
@@ -64,7 +64,7 @@ option(ENABLE_MULTI_PROCESS_BUILDS "Enable /MP flag for MSVS solution" ON)
 
 # Used for Snap packages and also useful for debugging
 if(NOT APPLE_IOS)
-  option(ENABLE_MONOLITHIC_INSTALL "Install everything in single directory on Linux and Mac" OFF)
+	option(ENABLE_MONOLITHIC_INSTALL "Install everything in single directory on Linux and Mac" OFF)
 endif()
 
 # Allow to pass package name from Travis CI
@@ -134,7 +134,7 @@ if(APPLE_MACOS)
 endif(APPLE_MACOS)
 
 if(APPLE_IOS)
-  set(SYSTEM_LIBS ${SYSTEM_LIBS} iconv) # boost.locale
+	set(SYSTEM_LIBS ${SYSTEM_LIBS} iconv) # boost.locale
 endif(APPLE_IOS)
 
 if(WIN32)
@@ -235,7 +235,7 @@ endif()
 
 set(FFmpeg_FIND_COMPONENTS AVFORMAT SWSCALE)
 if(APPLE_IOS)
-  set(FFmpeg_FIND_COMPONENTS ${FFmpeg_FIND_COMPONENTS} SWRESAMPLE)
+	set(FFmpeg_FIND_COMPONENTS ${FFmpeg_FIND_COMPONENTS} SWRESAMPLE)
 endif()
 find_package(Boost 1.48.0 COMPONENTS date_time filesystem locale program_options system thread REQUIRED)
 find_package(ZLIB REQUIRED)
@@ -274,13 +274,13 @@ elseif(APPLE)
 		set(DATA_DIR "." CACHE STRING "Where to install data files")
 	else()
 		set(APP_BUNDLE_DIR "${CMAKE_PROJECT_NAME}.app")
-    if(APPLE_MACOS)
-  		set(APP_BUNDLE_CONTENTS_DIR "${APP_BUNDLE_DIR}/Contents")
-  		set(APP_BUNDLE_BINARY_DIR "${APP_BUNDLE_CONTENTS_DIR}/MacOS")
-    else()
-  		set(APP_BUNDLE_CONTENTS_DIR "${APP_BUNDLE_DIR}")
-  		set(APP_BUNDLE_BINARY_DIR "${APP_BUNDLE_DIR}")
-    endif(APPLE_MACOS)
+		if(APPLE_MACOS)
+			set(APP_BUNDLE_CONTENTS_DIR "${APP_BUNDLE_DIR}/Contents")
+			set(APP_BUNDLE_BINARY_DIR "${APP_BUNDLE_CONTENTS_DIR}/MacOS")
+		else()
+			set(APP_BUNDLE_CONTENTS_DIR "${APP_BUNDLE_DIR}")
+			set(APP_BUNDLE_BINARY_DIR "${APP_BUNDLE_DIR}")
+		endif(APPLE_MACOS)
 		set(APP_BUNDLE_RESOURCES_DIR "${APP_BUNDLE_CONTENTS_DIR}/Resources")
 
 		set(BIN_DIR "${APP_BUNDLE_BINARY_DIR}" CACHE STRING "Where to install binaries")
