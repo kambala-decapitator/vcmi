@@ -158,7 +158,7 @@ static void SDLLogCallback(void*           userdata,
 
 #if defined(VCMI_WINDOWS) && !defined(__GNUC__) && defined(VCMI_WITH_DEBUG_CONSOLE)
 int wmain(int argc, wchar_t* argv[])
-#elif defined(VCMI_APPLE) || defined(VCMI_ANDROID)
+#elif defined(VCMI_MAC) || defined(VCMI_ANDROID)
 int SDL_main(int argc, char *argv[])
 #else
 int main(int argc, char * argv[])
