@@ -520,11 +520,11 @@ public:
 	std::string fName;
 	std::unique_ptr<FileStream> sfile;
 
-	CLoadFile(const boost::filesystem::path & fname, int minimalVersion = SERIALIZATION_VERSION); //throws!
+	CLoadFile(const bfs::path & fname, int minimalVersion = SERIALIZATION_VERSION); //throws!
 	~CLoadFile();
 	int read(void * data, unsigned size) override; //throws!
 
-	void openNextFile(const boost::filesystem::path & fname, int minimalVersion); //throws!
+	void openNextFile(const bfs::path & fname, int minimalVersion); //throws!
 	void clear();
 	void reportState(vstd::CLoggerBase * out) override;
 

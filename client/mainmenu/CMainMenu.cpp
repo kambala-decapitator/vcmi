@@ -58,7 +58,7 @@
 #include "../../lib/mapping/CCampaignHandler.h"
 
 
-namespace fs = boost::filesystem;
+namespace fs = bfs;
 
 std::shared_ptr<CMainMenu> CMM;
 ISelectionScreenInfo * SEL;

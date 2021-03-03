@@ -13,7 +13,7 @@
 
 #include "../registerTypes/RegisterTypes.h"
 
-CLoadIntegrityValidator::CLoadIntegrityValidator(const boost::filesystem::path &primaryFileName, const boost::filesystem::path &controlFileName, int minimalVersion)
+CLoadIntegrityValidator::CLoadIntegrityValidator(const bfs::path &primaryFileName, const bfs::path &controlFileName, int minimalVersion)
 	: serializer(this), foundDesync(false)
 {
 	registerTypes(serializer);

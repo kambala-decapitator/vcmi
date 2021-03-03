@@ -37,7 +37,7 @@ std::string CMappedFileLoader::getMountPoint() const
 	return ""; // does not have any meaning with this type of data source
 }
 
-boost::optional<boost::filesystem::path> CMappedFileLoader::getResourceName(const ResourceID & resourceName) const
+boost::optional<bfs::path> CMappedFileLoader::getResourceName(const ResourceID & resourceName) const
 {
 	return CResourceHandler::get()->getResourceName(fileList.at(resourceName));
 }
@@ -90,16 +90,16 @@ std::string CFilesystemList::getMountPoint() const
 	return "";
 }
 
-boost::optional<boost::filesystem::path> CFilesystemList::getResourceName(const ResourceID & resourceName) const
+boost::optional<bfs::path> CFilesystemList::getResourceName(const ResourceID & resourceName) const
 {
 	if (existsResource(resourceName))
 		return getResourcesWithName(resourceName).back()->getResourceName(resourceName);
-	return boost::optional<boost::filesystem::path>();
+	return boost::optional<bfs::path>();
 }
 
-std::set<boost::filesystem::path> CFilesystemList::getResourceNames(const ResourceID & resourceName) const
+std::set<bfs::path> CFilesystemList::getResourceNames(const ResourceID & resourceName) const
 {
-	std::set<boost::filesystem::path> paths;
+	std::set<bfs::path> paths;
 	for(auto& loader : getResourcesWithName(resourceName))
 	{
 		auto rn = loader->getResourceName(resourceName);

@@ -40,7 +40,7 @@ private:
 class DLL_LINKAGE CZipSaver
 {
 public:
-	explicit CZipSaver(std::shared_ptr<CIOApi> api, const boost::filesystem::path & path);
+	explicit CZipSaver(std::shared_ptr<CIOApi> api, const bfs::path & path);
 	virtual ~CZipSaver();
 
 	std::unique_ptr<COutputStream> addFile(const std::string & archiveFilename);

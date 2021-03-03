@@ -53,7 +53,7 @@ public:
 	 *
 	 * @throws std::runtime_error if the archive wasn't found or if the archive isn't supported
 	 */
-	CArchiveLoader(std::string mountPoint, boost::filesystem::path archive);
+	CArchiveLoader(std::string mountPoint, bfs::path archive);
 
 	/// Interface implementation
 	/// @see ISimpleResourceLoader
@@ -86,7 +86,7 @@ private:
 	void initSNDArchive(const std::string &mountPoint, CFileInputStream & fileStream);
 
 	/** The file path to the archive which is scanned and indexed. */
-	boost::filesystem::path archive;
+	bfs::path archive;
 
 	std::string mountPoint;
 

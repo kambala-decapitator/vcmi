@@ -78,7 +78,6 @@
 
 namespace po = boost::program_options;
 namespace po_style = boost::program_options::command_line_style;
-namespace bfs = boost::filesystem;
 
 std::string NAME_AFFIX = "client";
 std::string NAME = GameConstants::VCMI_VERSION + std::string(" (") + NAME_AFFIX + ')'; //application name
@@ -171,7 +170,7 @@ int main(int argc, char * argv[])
 
 #if !defined(VCMI_ANDROID) && !defined(VCMI_IOS)
 	// Correct working dir executable folder (not bundle folder) so we can use executable relative paths
-	boost::filesystem::current_path(boost::filesystem::system_complete(argv[0]).parent_path());
+	bfs::current_path(bfs::system_complete(argv[0]).parent_path());
 #endif
 	std::cout << "Starting... " << std::endl;
 	po::options_description opts("Allowed options");

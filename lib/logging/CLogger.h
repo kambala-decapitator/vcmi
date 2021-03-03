@@ -212,7 +212,7 @@ class DLL_LINKAGE CLogFileTarget : public ILogTarget
 public:
 	/// Constructs a CLogFileTarget and opens the file designated by filePath. If the append parameter is true, the file
 	/// will be appended to. Otherwise the file designated by filePath will be truncated before being opened.
-	explicit CLogFileTarget(boost::filesystem::path filePath, bool append = true);
+	explicit CLogFileTarget(bfs::path filePath, bool append = true);
 	~CLogFileTarget();
 
 	const CLogFormatter & getFormatter() const;

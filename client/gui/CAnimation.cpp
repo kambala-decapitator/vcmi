@@ -96,7 +96,7 @@ public:
 	void draw(SDL_Surface * where, int posX=0, int posY=0, Rect *src=nullptr, ui8 alpha=255) const override;
 	void draw(SDL_Surface * where, SDL_Rect * dest, SDL_Rect * src, ui8 alpha=255) const override;
 	std::shared_ptr<IImage> scaleFast(float scale) const override;
-	void exportBitmap(const boost::filesystem::path & path) const override;
+	void exportBitmap(const bfs::path & path) const override;
 	void playerColored(PlayerColor player) override;
 	void setFlagColor(PlayerColor player) override;
 	int width() const override;
@@ -715,7 +715,7 @@ std::shared_ptr<IImage> SDLImage::scaleFast(float scale) const
 	return std::shared_ptr<IImage>(ret);
 }
 
-void SDLImage::exportBitmap(const boost::filesystem::path& path) const
+void SDLImage::exportBitmap(const bfs::path& path) const
 {
 	SDL_SaveBMP(surf, path.string().c_str());
 }
@@ -952,7 +952,7 @@ void CAnimation::initFromJson(const JsonNode & config)
 	}
 }
 
-void CAnimation::exportBitmaps(const boost::filesystem::path& path) const
+void CAnimation::exportBitmaps(const bfs::path& path) const
 {
 	if(images.empty())
 	{
@@ -960,8 +960,8 @@ void CAnimation::exportBitmaps(const boost::filesystem::path& path) const
 		return;
 	}
 
-	boost::filesystem::path actualPath = path / "SPRITES" / name;
-	boost::filesystem::create_directories(actualPath);
+	bfs::path actualPath = path / "SPRITES" / name;
+	bfs::create_directories(actualPath);
 
 	size_t counter = 0;
 

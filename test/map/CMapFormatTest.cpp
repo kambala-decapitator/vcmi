@@ -29,8 +29,8 @@ static const int TEST_RANDOM_SEED = 1337;
 static void saveTestMap(CMemoryBuffer & serializeBuffer, const std::string & filename)
 {
 	auto path = VCMIDirs::get().userDataPath() / filename;
-	boost::filesystem::remove(path);
-	boost::filesystem::ofstream tmp(path, boost::filesystem::ofstream::binary);
+	bfs::remove(path);
+	bfs::ofstream tmp(path, bfs::ofstream::binary);
 
 	tmp.write((const char *)serializeBuffer.getBuffer().data(), serializeBuffer.getSize());
 	tmp.flush();

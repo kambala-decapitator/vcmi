@@ -15,7 +15,7 @@
 
 extern template void registerTypes<BinaryDeserializer>(BinaryDeserializer & s);
 
-CLoadFile::CLoadFile(const boost::filesystem::path & fname, int minimalVersion)
+CLoadFile::CLoadFile(const bfs::path & fname, int minimalVersion)
 	: serializer(this)
 {
 	registerTypes(serializer);
@@ -32,7 +32,7 @@ int CLoadFile::read(void * data, unsigned size)
 	return size;
 }
 
-void CLoadFile::openNextFile(const boost::filesystem::path & fname, int minimalVersion)
+void CLoadFile::openNextFile(const bfs::path & fname, int minimalVersion)
 {
 	assert(!serializer.reverseEndianess);
 	assert(minimalVersion <= SERIALIZATION_VERSION);

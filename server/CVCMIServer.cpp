@@ -910,7 +910,7 @@ int main(int argc, char * argv[])
 {
 #if !defined(VCMI_ANDROID) && !defined(VCMI_IOS)
 	// Correct working dir executable folder (not bundle folder) so we can use executable relative paths
-	boost::filesystem::current_path(boost::filesystem::system_complete(argv[0]).parent_path());
+	bfs::current_path(bfs::system_complete(argv[0]).parent_path());
 #endif
 	// Installs a sig sev segmentation violation handler
 	// to log stacktrace

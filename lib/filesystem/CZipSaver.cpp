@@ -79,7 +79,7 @@ si64 CZipOutputStream::write(const ui8 * data, si64 size)
 }
 
 ///CZipSaver
-CZipSaver::CZipSaver(std::shared_ptr<CIOApi> api, const boost::filesystem::path & path):
+CZipSaver::CZipSaver(std::shared_ptr<CIOApi> api, const bfs::path & path):
 	ioApi(api),
 	zipApi(ioApi->getApiStructure()),
 	handle(nullptr),

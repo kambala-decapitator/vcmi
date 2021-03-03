@@ -31,9 +31,9 @@ void CVcmiTestConfig::SetUp()
 	/* TEST_DATA_DIR may be wrong, if yes below test don't run,
 	find your test data folder in your build and change TEST_DATA_DIR for it*/
 	const std::string TEST_DATA_DIR = "test/testdata/";
-	auto path = boost::filesystem::current_path();
+	auto path = bfs::current_path();
 	path+= "/" + TEST_DATA_DIR;
-	if(boost::filesystem::exists(path)){
+	if(bfs::exists(path)){
 		auto loader = new CFilesystemLoader("test/", TEST_DATA_DIR);
 		dynamic_cast<CFilesystemList*>(CResourceHandler::get())->addLoader(loader, false);
 	}

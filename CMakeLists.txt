@@ -234,10 +234,14 @@ endif()
 ############################################
 
 set(FFmpeg_FIND_COMPONENTS AVFORMAT SWSCALE)
+set(Boost_FIND_COMPONENTS date_time filesystem locale program_options system thread)
 if(APPLE_IOS)
 	set(FFmpeg_FIND_COMPONENTS ${FFmpeg_FIND_COMPONENTS} SWRESAMPLE)
+	# iOS uses non-Boost filesystem
+else()
+	set(Boost_FIND_COMPONENTS ${Boost_FIND_COMPONENTS} filesystem)
 endif()
-find_package(Boost 1.48.0 COMPONENTS date_time filesystem locale program_options system thread REQUIRED)
+find_package(Boost 1.48.0 COMPONENTS ${Boost_FIND_COMPONENTS} REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(FFmpeg REQUIRED)
 find_package(Minizip)

@@ -21,7 +21,7 @@ public:
 		boost::iostreams::closable_tag
 		{} category;
 
-	FileBuf(const boost::filesystem::path& filename, std::ios_base::openmode mode);
+	FileBuf(const bfs::path& filename, std::ios_base::openmode mode);
 
 	std::streamsize read(char* s, std::streamsize n);
 	std::streamsize write(const char* s, std::streamsize n);
@@ -43,10 +43,10 @@ class DLL_LINKAGE FileStream : public boost::iostreams::stream<FileBuf>
 {
 public:
 	FileStream() = default;
-	explicit FileStream(const boost::filesystem::path& p, std::ios_base::openmode mode = std::ios_base::in | std::ios_base::out)
+	explicit FileStream(const bfs::path& p, std::ios_base::openmode mode = std::ios_base::in | std::ios_base::out)
 		: boost::iostreams::stream<FileBuf>(p, mode) {}
 
-	static bool CreateFile(const boost::filesystem::path& filename);
+	static bool CreateFile(const bfs::path& filename);
 
 	static zlib_filefunc64_def* GetMinizipFilefunc();
 };

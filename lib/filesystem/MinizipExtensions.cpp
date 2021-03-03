@@ -125,10 +125,10 @@ voidpf ZCALLBACK CProxyIOApi::openFileProxy(voidpf opaque, const void * filename
 {
 	assert(opaque != nullptr);
 
-	boost::filesystem::path path;
+	bfs::path path;
 
 	if(filename != nullptr)
-		path =  static_cast<const boost::filesystem::path::value_type *>(filename);
+		path =  static_cast<const bfs::path::value_type *>(filename);
 
 	return ((CProxyIOApi *)opaque)->openFile(path, mode);
 }
@@ -167,7 +167,7 @@ int ZCALLBACK CProxyIOApi::errorFileProxy(voidpf opaque, voidpf stream)
     return 0;
 }
 
-CInputOutputStream * CProxyIOApi::openFile(const boost::filesystem::path & filename, int mode)
+CInputOutputStream * CProxyIOApi::openFile(const bfs::path & filename, int mode)
 {
 	logGlobal->trace("CProxyIOApi: stream opened for %s with mode %d", filename.string(), mode);
 
@@ -202,7 +202,7 @@ zlib_filefunc64_def CProxyROIOApi::getApiStructure()
 	return api;
 }
 
-CInputStream * CProxyROIOApi::openFile(const boost::filesystem::path& filename, int mode)
+CInputStream * CProxyROIOApi::openFile(const bfs::path& filename, int mode)
 {
 	logGlobal->trace("CProxyROIOApi: stream opened for %s with mode %d", filename.string(), mode);
 
@@ -214,10 +214,10 @@ voidpf ZCALLBACK CProxyROIOApi::openFileProxy(voidpf opaque, const void* filenam
 {
 	assert(opaque != nullptr);
 
-	boost::filesystem::path path;
+	bfs::path path;
 
 	if(filename != nullptr)
-		path =  static_cast<const boost::filesystem::path::value_type *>(filename);
+		path =  static_cast<const bfs::path::value_type *>(filename);
 
 	return ((CProxyROIOApi *)opaque)->openFile(path, mode);
 }

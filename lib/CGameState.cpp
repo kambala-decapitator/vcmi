@@ -783,7 +783,7 @@ void CGameState::initNewGame(const IMapService * mapService, bool allowSavingRan
 			try
 			{
 				auto path = VCMIDirs::get().userCachePath() / "RandomMaps";
-				boost::filesystem::create_directories(path);
+				bfs::create_directories(path);
 
 				std::shared_ptr<CMapGenOptions> options = scenarioOps->mapGenOptions;
 

@@ -11,8 +11,6 @@
 #include "StdInc.h"
 #include "VCMIDirs.h"
 
-namespace bfs = boost::filesystem;
-
 bfs::path IVCMIDirs::userSavePath() const { return userDataPath() / "Saves"; }
 
 bfs::path IVCMIDirs::fullLibraryPath(const std::string &desiredFolder, const std::string &baseLibName) const
@@ -120,17 +118,17 @@ bool StartBatchCopyDataProgram(
 class VCMIDirsWIN32 final : public IVCMIDirs
 {
 	public:
-		boost::filesystem::path userDataPath() const override;
-		boost::filesystem::path userCachePath() const override;
-		boost::filesystem::path userConfigPath() const override;
+		bfs::path userDataPath() const override;
+		bfs::path userCachePath() const override;
+		bfs::path userConfigPath() const override;
 
-		std::vector<boost::filesystem::path> dataPaths() const override;
+		std::vector<bfs::path> dataPaths() const override;
 
-		boost::filesystem::path clientPath() const override;
-		boost::filesystem::path serverPath() const override;
+		bfs::path clientPath() const override;
+		bfs::path serverPath() const override;
 
-		boost::filesystem::path libraryPath() const override;
-		boost::filesystem::path binaryPath() const override;
+		bfs::path libraryPath() const override;
+		bfs::path binaryPath() const override;
 
 		std::string libraryName(const std::string& basename) const override;
 
@@ -138,8 +136,8 @@ class VCMIDirsWIN32 final : public IVCMIDirs
 
 		void init() override;
 	protected:
-		boost::filesystem::path oldUserDataPath() const;
-		boost::filesystem::path oldUserSavePath() const;
+		bfs::path oldUserDataPath() const;
+		bfs::path oldUserSavePath() const;
 };
 
 void VCMIDirsWIN32::init()
@@ -346,8 +344,8 @@ std::string VCMIDirsWIN32::libraryName(const std::string& basename) const { retu
 class IVCMIDirsUNIX : public IVCMIDirs
 {
 	public:
-		boost::filesystem::path clientPath() const override;
-		boost::filesystem::path serverPath() const override;
+		bfs::path clientPath() const override;
+		bfs::path serverPath() const override;
 
 		std::string genHelpString() const override;
 
@@ -427,13 +425,13 @@ bool VCMIDirsIOS::developmentMode() const { return false; }
 class VCMIDirsOSX final : public VCMIDirsApple
 {
 	public:
-		boost::filesystem::path userDataPath() const override;
-		boost::filesystem::path userCachePath() const override;
+		bfs::path userDataPath() const override;
+		bfs::path userCachePath() const override;
 
-		std::vector<boost::filesystem::path> dataPaths() const override;
+		std::vector<bfs::path> dataPaths() const override;
 
-		boost::filesystem::path libraryPath() const override;
-		boost::filesystem::path binaryPath() const override;
+		bfs::path libraryPath() const override;
+		bfs::path binaryPath() const override;
 
 		void init() override;
 };
@@ -463,12 +461,12 @@ void VCMIDirsOSX::init()
 
 		for (bfs::directory_iterator file(from); file != bfs::directory_iterator(); ++file)
 		{
-			const boost::filesystem::path& srcFilePath = file->path();
-			const boost::filesystem::path  dstFilePath = to / srcFilePath.filename();
+			const bfs::path& srcFilePath = file->path();
+			const bfs::path  dstFilePath = to / srcFilePath.filename();
 
 			// TODO: Aplication should ask user what to do when file exists:
 			// replace/ignore/stop process/replace all/ignore all
-			if (!boost::filesystem::exists(dstFilePath))
+			if (!bfs::exists(dstFilePath))
 				bfs::rename(srcFilePath, dstFilePath);
 		}
 
@@ -517,14 +515,14 @@ bfs::path VCMIDirsOSX::binaryPath() const { return "."; }
 class VCMIDirsXDG : public IVCMIDirsUNIX
 {
 public:
-	boost::filesystem::path userDataPath() const override;
-	boost::filesystem::path userCachePath() const override;
-	boost::filesystem::path userConfigPath() const override;
+	bfs::path userDataPath() const override;
+	bfs::path userCachePath() const override;
+	bfs::path userConfigPath() const override;
 
-	std::vector<boost::filesystem::path> dataPaths() const override;
+	std::vector<bfs::path> dataPaths() const override;
 
-	boost::filesystem::path libraryPath() const override;
-	boost::filesystem::path binaryPath() const override;
+	bfs::path libraryPath() const override;
+	bfs::path binaryPath() const override;
 
 	std::string libraryName(const std::string& basename) const override;
 };
@@ -692,10 +690,12 @@ namespace VCMIDirs
 		static bool initialized = false;
 		if (!initialized)
 		{
+			#ifndef VCMI_IOS
 			#ifndef VCMI_ANDROID
 			std::locale::global(boost::locale::generator().generate("en_US.UTF-8"));
 			#endif
-			boost::filesystem::path::imbue(std::locale());
+			bfs::path::imbue(std::locale());
+			#endif
 
 			singleton.init();
 			initialized = true;

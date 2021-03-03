@@ -137,8 +137,8 @@ void CClient::loadGame()
 	std::unique_ptr<CLoadFile> loader;
 	try
 	{
-		boost::filesystem::path clientSaveName = *CResourceHandler::get("local")->getResourceName(ResourceID(CSH->si->mapname, EResType::CLIENT_SAVEGAME));
-		boost::filesystem::path controlServerSaveName;
+		bfs::path clientSaveName = *CResourceHandler::get("local")->getResourceName(ResourceID(CSH->si->mapname, EResType::CLIENT_SAVEGAME));
+		bfs::path controlServerSaveName;
 
 		if(CResourceHandler::get("local")->existsResource(ResourceID(CSH->si->mapname, EResType::SERVER_SAVEGAME)))
 		{
@@ -146,13 +146,13 @@ void CClient::loadGame()
 		}
 		else // create entry for server savegame. Triggered if save was made after launch and not yet present in res handler
 		{
-			controlServerSaveName = boost::filesystem::path(clientSaveName).replace_extension(".vsgm1");
+			controlServerSaveName = bfs::path(clientSaveName).replace_extension(".vsgm1");
 			CResourceHandler::get("local")->createResource(controlServerSaveName.string(), true);
 		}
 
 		if(clientSaveName.empty())
 			throw std::runtime_error("Cannot open client part of " + CSH->si->mapname);
-		if(controlServerSaveName.empty() || !boost::filesystem::exists(controlServerSaveName))
+		if(controlServerSaveName.empty() || !bfs::exists(controlServerSaveName))
 			throw std::runtime_error("Cannot open server part of " + CSH->si->mapname);
 
 		{
@@ -358,8 +358,8 @@ std::string CClient::aiNameForPlayer(const PlayerSettings & ps, bool battleAI)
 {
 	if(ps.name.size())
 	{
-		const boost::filesystem::path aiPath = VCMIDirs::get().fullLibraryPath("AI", ps.name);
-		if(boost::filesystem::exists(aiPath))
+		const bfs::path aiPath = VCMIDirs::get().fullLibraryPath("AI", ps.name);
+		if(bfs::exists(aiPath))
 			return ps.name;
 	}
 

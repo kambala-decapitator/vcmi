@@ -40,7 +40,7 @@ public:
 
 	virtual std::shared_ptr<IImage> scaleFast(float scale) const = 0;
 
-	virtual void exportBitmap(const boost::filesystem::path & path) const = 0;
+	virtual void exportBitmap(const bfs::path & path) const = 0;
 
 	//Change palette to specific player
 	virtual void playerColored(PlayerColor player)=0;
@@ -117,7 +117,7 @@ public:
 
 	std::shared_ptr<IImage> getImage(size_t frame, size_t group=0, bool verbose=true) const;
 
-	void exportBitmaps(const boost::filesystem::path & path) const;
+	void exportBitmaps(const bfs::path & path) const;
 
 	//all available frames
 	void load  ();

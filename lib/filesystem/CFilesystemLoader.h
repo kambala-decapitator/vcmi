@@ -28,7 +28,7 @@ public:
 	 *
 	 * @throws std::runtime_error if the base directory is not a directory or if it is not available
 	 */
-	explicit CFilesystemLoader(std::string mountPoint, boost::filesystem::path baseDirectory, size_t depth = 16, bool initial = false);
+	explicit CFilesystemLoader(std::string mountPoint, bfs::path baseDirectory, size_t depth = 16, bool initial = false);
 
 	/// Interface implementation
 	/// @see ISimpleResourceLoader
@@ -36,13 +36,13 @@ public:
 	bool existsResource(const ResourceID & resourceName) const override;
 	std::string getMountPoint() const override;
 	bool createResource(std::string filename, bool update = false) override;
-	boost::optional<boost::filesystem::path> getResourceName(const ResourceID & resourceName) const override;
+	boost::optional<bfs::path> getResourceName(const ResourceID & resourceName) const override;
 	void updateFilteredFiles(std::function<bool(const std::string &)> filter) const override;
 	std::unordered_set<ResourceID> getFilteredFiles(std::function<bool(const ResourceID &)> filter) const override;
 
 private:
 	/** The base directory which is scanned and indexed. */
-	boost::filesystem::path baseDirectory;
+	bfs::path baseDirectory;
 
 	std::string mountPoint;
 
@@ -50,7 +50,7 @@ private:
 	 * key = ResourceID for resource loader
 	 * value = name that can be used to access file
 	*/
-	mutable std::unordered_map<ResourceID, boost::filesystem::path> fileList;
+	mutable std::unordered_map<ResourceID, bfs::path> fileList;
 
 	/**
 	 * Returns a list of pathnames denoting the files in the directory denoted by this pathname.
@@ -61,5 +61,5 @@ private:
 	 * @return a list of pathnames denoting the files and directories in the directory denoted by this pathname
 	 * The array will be empty if the directory is empty. Ptr is null if the directory doesn't exist or if it isn't a directory.
 	 */
-	std::unordered_map<ResourceID, boost::filesystem::path> listFiles(const std::string &mountPoint, size_t depth, bool initial) const;
+	std::unordered_map<ResourceID, bfs::path> listFiles(const std::string &mountPoint, size_t depth, bool initial) const;
 };

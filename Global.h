@@ -181,9 +181,15 @@ static_assert(sizeof(bool) == 1, "Bool needs to be 1 byte in size.");
 #include <boost/crc.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/date_time/posix_time/posix_time_io.hpp>
+#ifdef VCMI_IOS
+#include <ghc/filesystem.hpp>
+namespace bfs = ghc::filesystem;
+#else
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/fstream.hpp>
+namespace bfs = boost::filesystem;
+#endif
 #include <boost/format.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/lexical_cast.hpp>

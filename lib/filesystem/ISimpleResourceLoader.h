@@ -47,9 +47,9 @@ public:
 	 *
 	 * @return path or empty optional if file can't be accessed independently (e.g. file in archive)
 	 */
-	virtual boost::optional<boost::filesystem::path> getResourceName(const ResourceID & resourceName) const
+	virtual boost::optional<bfs::path> getResourceName(const ResourceID & resourceName) const
 	{
-		return boost::optional<boost::filesystem::path>();
+		return boost::optional<bfs::path>();
 	}
 
 	/**
@@ -57,9 +57,9 @@ public:
 	 *
 	 * @return std::set with names.
 	 */
-	virtual std::set<boost::filesystem::path> getResourceNames(const ResourceID & resourceName) const
+	virtual std::set<bfs::path> getResourceNames(const ResourceID & resourceName) const
 	{
-		std::set<boost::filesystem::path> result;
+		std::set<bfs::path> result;
 		auto rn = getResourceName(resourceName);
 		if(rn)
 		{

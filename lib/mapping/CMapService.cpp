@@ -57,7 +57,7 @@ std::unique_ptr<CMapHeader> CMapService::loadMapHeader(const ui8 * buffer, int s
 	return header;
 }
 
-void CMapService::saveMap(const std::unique_ptr<CMap> & map, boost::filesystem::path fullPath) const
+void CMapService::saveMap(const std::unique_ptr<CMap> & map, bfs::path fullPath) const
 {
 	CMemoryBuffer serializeBuffer;
 	{
@@ -65,8 +65,8 @@ void CMapService::saveMap(const std::unique_ptr<CMap> & map, boost::filesystem::
 		saver.saveMap(map);
 	}
 	{
-		boost::filesystem::remove(fullPath);
-		boost::filesystem::ofstream tmp(fullPath, boost::filesystem::ofstream::binary);
+		bfs::remove(fullPath);
+		bfs::ofstream tmp(fullPath, bfs::ofstream::binary);
 
 		tmp.write((const char *)serializeBuffer.getBuffer().data(),serializeBuffer.getSize());
 		tmp.flush();

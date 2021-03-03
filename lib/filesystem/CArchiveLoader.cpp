@@ -21,7 +21,7 @@ ArchiveEntry::ArchiveEntry()
 
 }
 
-CArchiveLoader::CArchiveLoader(std::string _mountPoint, boost::filesystem::path _archive) :
+CArchiveLoader::CArchiveLoader(std::string _mountPoint, bfs::path _archive) :
     archive(std::move(_archive)),
     mountPoint(std::move(_mountPoint))
 {

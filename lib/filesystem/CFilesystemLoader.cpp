@@ -13,8 +13,6 @@
 #include "CFileInputStream.h"
 #include "FileStream.h"
 
-namespace bfs = boost::filesystem;
-
 CFilesystemLoader::CFilesystemLoader(std::string _mountPoint, bfs::path baseDirectory, size_t depth, bool initial):
     baseDirectory(std::move(baseDirectory)),
     mountPoint(std::move(_mountPoint)),
@@ -41,7 +39,7 @@ std::string CFilesystemLoader::getMountPoint() const
 	return mountPoint;
 }
 
-boost::optional<boost::filesystem::path> CFilesystemLoader::getResourceName(const ResourceID & resourceName) const
+boost::optional<bfs::path> CFilesystemLoader::getResourceName(const ResourceID & resourceName) const
 {
 	assert(existsResource(resourceName));
 

@@ -27,7 +27,7 @@ public:
 	 *
 	 * @throws std::runtime_error if file wasn't found
 	 */
-	CFileInputStream(const boost::filesystem::path & file, si64 start = 0, si64 size = 0);
+	CFileInputStream(const bfs::path & file, si64 start = 0, si64 size = 0);
 
 	/**
 	 * Reads n bytes from the stream into the data buffer.

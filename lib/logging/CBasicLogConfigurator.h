@@ -21,7 +21,7 @@ class JsonNode;
 class DLL_LINKAGE CBasicLogConfigurator
 {
 public:
-	CBasicLogConfigurator(boost::filesystem::path filePath, CConsoleHandler * const console);
+	CBasicLogConfigurator(bfs::path filePath, CConsoleHandler * const console);
 
 	/// Configures the logging system by parsing the logging settings. It adds the console target and the file target to the global logger.
 	/// Doesn't throw, but logs on success or fault.
@@ -41,7 +41,7 @@ private:
 	// Throws: std::runtime_error
 	static EConsoleTextColor::EConsoleTextColor getConsoleColor(const std::string & colorName);
 
-	boost::filesystem::path filePath;
+	bfs::path filePath;
 	CConsoleHandler * console;
 	bool appendToLogFile;
 };

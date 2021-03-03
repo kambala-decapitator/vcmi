@@ -50,7 +50,7 @@ public:
 
 	zlib_filefunc64_def getApiStructure() override;
 private:
-	CInputOutputStream * openFile(const boost::filesystem::path & filename, int mode);
+	CInputOutputStream * openFile(const bfs::path & filename, int mode);
 
 	CInputOutputStream * data;
 
@@ -72,7 +72,7 @@ public:
 
 	zlib_filefunc64_def getApiStructure() override;
 private:
-	CInputStream * openFile(const boost::filesystem::path & filename, int mode);
+	CInputStream * openFile(const bfs::path & filename, int mode);
 
 	CInputStream * data;
 

@@ -72,7 +72,7 @@ public:
 	 */
 	virtual std::unique_ptr<CMapHeader> loadMapHeader(const ui8 * buffer, int size, const std::string & name) const = 0;
 
-	virtual void saveMap(const std::unique_ptr<CMap> & map, boost::filesystem::path fullPath) const = 0;
+	virtual void saveMap(const std::unique_ptr<CMap> & map, bfs::path fullPath) const = 0;
 };
 
 class DLL_LINKAGE CMapService : public IMapService
@@ -85,7 +85,7 @@ public:
 	std::unique_ptr<CMapHeader> loadMapHeader(const ResourceID & name) const override;
 	std::unique_ptr<CMap> loadMap(const ui8 * buffer, int size, const std::string & name) const override;
 	std::unique_ptr<CMapHeader> loadMapHeader(const ui8 * buffer, int size, const std::string & name) const override;
-	void saveMap(const std::unique_ptr<CMap> & map, boost::filesystem::path fullPath) const override;
+	void saveMap(const std::unique_ptr<CMap> & map, bfs::path fullPath) const override;
 private:
 	/**
 	 * Gets a map input stream object specified by a map name.

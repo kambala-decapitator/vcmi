@@ -77,7 +77,7 @@ std::unique_ptr<CMapHeader> MapServiceMock::loadMapHeader(const ui8 * buffer, in
 	return initialLoader.loadMapHeader();
 }
 
-void MapServiceMock::saveMap(const std::unique_ptr<CMap> & map, boost::filesystem::path fullPath) const
+void MapServiceMock::saveMap(const std::unique_ptr<CMap> & map, bfs::path fullPath) const
 {
 	FAIL() << "Unexpected call to MapServiceMock::saveMap";
 }

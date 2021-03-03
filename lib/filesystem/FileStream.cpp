@@ -234,7 +234,7 @@ zlib_filefunc64_def* FileStream::GetMinizipFilefunc()
 template struct boost::iostreams::stream<FileBuf>;
 
 /*static*/
-bool FileStream::CreateFile(const boost::filesystem::path& filename)
+bool FileStream::CreateFile(const bfs::path& filename)
 {
 	FILE* f = do_open(filename.c_str(), CHAR_LITERAL("wb"));
 	bool result = (f != nullptr);
@@ -243,7 +243,7 @@ bool FileStream::CreateFile(const boost::filesystem::path& filename)
 	return result;
 }
 
-FileBuf::FileBuf(const boost::filesystem::path& filename, std::ios_base::openmode mode)
+FileBuf::FileBuf(const bfs::path& filename, std::ios_base::openmode mode)
 {
 	auto openmode = [mode]() -> std::basic_string<CharType>
 	{

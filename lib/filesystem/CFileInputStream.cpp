@@ -10,7 +10,7 @@
 #include "StdInc.h"
 #include "CFileInputStream.h"
 
-CFileInputStream::CFileInputStream(const boost::filesystem::path & file, si64 start, si64 size)
+CFileInputStream::CFileInputStream(const bfs::path & file, si64 start, si64 size)
   : dataStart{start},
 	dataSize{size},
 	fileStream{file, std::ios::in | std::ios::binary}

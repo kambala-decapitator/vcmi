@@ -30,7 +30,7 @@
 #endif
 
 template<typename rett>
-std::shared_ptr<rett> createAny(const boost::filesystem::path & libpath, const std::string & methodName)
+std::shared_ptr<rett> createAny(const bfs::path & libpath, const std::string & methodName)
 {
 #ifdef VCMI_ANDROID
 	// android currently doesn't support loading libs dynamically, so the access to the known libraries
@@ -92,13 +92,13 @@ std::shared_ptr<rett> createAny(const boost::filesystem::path & libpath, const s
 #ifdef VCMI_ANDROID
 
 template<>
-std::shared_ptr<CGlobalAI> createAny(const boost::filesystem::path & libpath, const std::string & methodName)
+std::shared_ptr<CGlobalAI> createAny(const bfs::path & libpath, const std::string & methodName)
 {
 	return std::make_shared<VCAI>();
 }
 
 template<>
-std::shared_ptr<CBattleGameInterface> createAny(const boost::filesystem::path & libpath, const std::string & methodName)
+std::shared_ptr<CBattleGameInterface> createAny(const bfs::path & libpath, const std::string & methodName)
 {
 	return std::make_shared<CBattleAI>();
 }
@@ -110,7 +110,7 @@ std::shared_ptr<rett> createAnyAI(std::string dllname, const std::string & metho
 {
 	logGlobal->info("Opening %s", dllname);
 
-	const boost::filesystem::path filePath = VCMIDirs::get().fullLibraryPath("AI", dllname);
+	const bfs::path filePath = VCMIDirs::get().fullLibraryPath("AI", dllname);
 	auto ret = createAny<rett>(filePath, methodName);
 	ret->dllName = std::move(dllname);
 	return ret;

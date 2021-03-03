@@ -15,7 +15,7 @@
 
 extern template void registerTypes<BinarySerializer>(BinarySerializer & s);
 
-CSaveFile::CSaveFile(const boost::filesystem::path &fname)
+CSaveFile::CSaveFile(const bfs::path &fname)
 	: serializer(this)
 {
 	registerTypes(serializer);
@@ -32,7 +32,7 @@ int CSaveFile::write(const void * data, unsigned size)
 	return size;
 }
 
-void CSaveFile::openNextFile(const boost::filesystem::path &fname)
+void CSaveFile::openNextFile(const bfs::path &fname)
 {
 	fName = fname;
 	try

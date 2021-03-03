@@ -351,14 +351,14 @@ class DLL_LINKAGE CSaveFile : public IBinaryWriter
 public:
 	BinarySerializer serializer;
 
-	boost::filesystem::path fName;
+	bfs::path fName;
 	std::unique_ptr<FileStream> sfile;
 
-	CSaveFile(const boost::filesystem::path &fname); //throws!
+	CSaveFile(const bfs::path &fname); //throws!
 	~CSaveFile();
 	int write(const void * data, unsigned size) override;
 
-	void openNextFile(const boost::filesystem::path &fname); //throws!
+	void openNextFile(const bfs::path &fname); //throws!
 	void clear();
 	void reportState(vstd::CLoggerBase * out) override;
 

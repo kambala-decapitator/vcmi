@@ -1685,7 +1685,7 @@ void CPlayerInterface::update()
 
 int CPlayerInterface::getLastIndex( std::string namePrefix)
 {
-	using namespace boost::filesystem;
+	using namespace bfs;
 	using namespace boost::algorithm;
 
 	path gamesDir = VCMIDirs::get().userSavePath();

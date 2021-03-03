@@ -13,7 +13,7 @@
 
 #include "../ScopeGuard.h"
 
-CZipStream::CZipStream(std::shared_ptr<CIOApi> api, const boost::filesystem::path & archive, unz64_file_pos filepos)
+CZipStream::CZipStream(std::shared_ptr<CIOApi> api, const bfs::path & archive, unz64_file_pos filepos)
 {
 	zlib_filefunc64_def zlibApi;
 
@@ -50,7 +50,7 @@ ui32 CZipStream::calculateCRC32()
 }
 
 ///CZipLoader
-CZipLoader::CZipLoader(const std::string & mountPoint, const boost::filesystem::path & archive, std::shared_ptr<CIOApi> api):
+CZipLoader::CZipLoader(const std::string & mountPoint, const bfs::path & archive, std::shared_ptr<CIOApi> api):
 	ioApi(api),
     zlibApi(ioApi->getApiStructure()),
     archiveName(archive),
@@ -60,7 +60,7 @@ CZipLoader::CZipLoader(const std::string & mountPoint, const boost::filesystem::
 	logGlobal->trace("Zip archive loaded, %d files found", files.size());
 }
 
-std::unordered_map<ResourceID, unz64_file_pos> CZipLoader::listFiles(const std::string & mountPoint, const boost::filesystem::path & archive)
+std::unordered_map<ResourceID, unz64_file_pos> CZipLoader::listFiles(const std::string & mountPoint, const bfs::path & archive)
 {
 	std::unordered_map<ResourceID, unz64_file_pos> ret;
 
@@ -149,7 +149,7 @@ static bool extractCurrent(unzFile file, std::ostream & where)
 	return false;
 }
 
-std::vector<std::string> ZipArchive::listFiles(boost::filesystem::path filename)
+std::vector<std::string> ZipArchive::listFiles(bfs::path filename)
 {
 	std::vector<std::string> ret;
 
@@ -177,14 +177,14 @@ std::vector<std::string> ZipArchive::listFiles(boost::filesystem::path filename)
 	return ret;
 }
 
-bool ZipArchive::extract(boost::filesystem::path from, boost::filesystem::path where)
+bool ZipArchive::extract(bfs::path from, bfs::path where)
 {
 	// Note: may not be fast enough for large archives (should NOT happen with mods)
 	// because locating each file by name may be slow. Unlikely slower than decompression though
 	return extract(from, where, listFiles(from));
 }
 
-bool ZipArchive::extract(boost::filesystem::path from, boost::filesystem::path where, std::vector<std::string> what)
+bool ZipArchive::extract(bfs::path from, bfs::path where, std::vector<std::string> what)
 {
 	unzFile archive = unzOpen2_64(from.c_str(), FileStream::GetMinizipFilefunc());
 
@@ -198,10 +198,10 @@ bool ZipArchive::extract(boost::filesystem::path from, boost::filesystem::path w
 		if (unzLocateFile(archive, file.c_str(), 1) != UNZ_OK)
 			return false;
 
-		const boost::filesystem::path fullName = where / file;
-		const boost::filesystem::path fullPath = fullName.parent_path();
+		const bfs::path fullName = where / file;
+		const bfs::path fullPath = fullName.parent_path();
 
-		boost::filesystem::create_directories(fullPath);
+		bfs::create_directories(fullPath);
 		// directory. No file to extract
 		// TODO: better way to detect directory? Probably check return value of unzOpenCurrentFile?
 		if (boost::algorithm::ends_with(file, "/"))
