@@ -144,6 +144,7 @@ LONG WINAPI onUnhandledException(EXCEPTION_POINTERS* exception)
 
 void CConsoleHandler::setColor(EConsoleTextColor::EConsoleTextColor color)
 {
+#ifndef VCMI_IOS
 	TColor colorCode;
 	switch(color)
 	{
@@ -182,6 +183,7 @@ void CConsoleHandler::setColor(EConsoleTextColor::EConsoleTextColor color)
 	SetConsoleTextAttribute(handleErr, colorCode);
 #else
     std::cout << colorCode;
+#endif
 #endif
 }
 
