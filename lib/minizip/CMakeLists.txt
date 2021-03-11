@@ -10,7 +10,12 @@ set(lib_SRCS
 		ioapi.c
 )
 
-add_library(minizip SHARED ${lib_SRCS})
+if(APPLE_IOS)
+	set(LIBRARY_TYPE STATIC)
+else()
+	set(LIBRARY_TYPE SHARED)
+endif()
+add_library(minizip ${LIBRARY_TYPE} ${lib_SRCS})
 if(MSVC)
     set_target_properties(minizip PROPERTIES COMPILE_DEFINITIONS "MINIZIP_DLL;ZLIB_DLL;ZLIB_INTERNAL")
 endif()

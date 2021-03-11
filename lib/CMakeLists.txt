@@ -352,11 +352,14 @@ set(lib_HEADERS
 if(APPLE_IOS)
 	set(lib_SRCS ${lib_SRCS} CIOSUtils.m)
 	set(lib_HEADERS ${lib_HEADERS} CIOSUtils.h)
+	set(LIBRARY_TYPE STATIC)
+else()
+	set(LIBRARY_TYPE SHARED)
 endif(APPLE_IOS)
 
 assign_source_group(${lib_SRCS} ${lib_HEADERS})
 
-add_library(vcmi SHARED ${lib_SRCS} ${lib_HEADERS})
+add_library(vcmi ${LIBRARY_TYPE} ${lib_SRCS} ${lib_HEADERS})
 set_target_properties(vcmi PROPERTIES COMPILE_DEFINITIONS "VCMI_DLL=1")
 target_link_libraries(vcmi PUBLIC
 		${MINIZIP_LIBRARIES} ${SDL2_LIBRARY} ${ZLIB_LIBRARIES}
