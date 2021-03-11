@@ -58,4 +58,10 @@ vcmi_set_output_dir(vcmiserver "")
 set_target_properties(vcmiserver PROPERTIES ${PCH_PROPERTIES})
 cotire(vcmiserver)
 
-install(TARGETS vcmiserver DESTINATION ${BIN_DIR})
+if(APPLE_IOS)
+	add_custom_command(TARGET vcmiserver POST_BUILD
+		COMMAND ${CMAKE_COMMAND} --install "${CMAKE_BINARY_DIR}" --config "$<CONFIG>" --prefix "$<TARGET_BUNDLE_CONTENT_DIR:vcmiserver>"
+	)
+else()
+	install(TARGETS vcmiserver DESTINATION ${BIN_DIR})
+endif()

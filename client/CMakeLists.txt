@@ -175,7 +175,7 @@ if(WIN32)
 	endif()
 elseif(APPLE_IOS)
 	target_link_libraries(vcmiclient PRIVATE
-		"-framework Foundation -framework UIKit -framework QuartzCore -framework CoreGraphics -framework CoreServices -framework ImageIO" # SDL2_image
+		"-framework Foundation -framework UIKit -framework QuartzCore -framework CoreGraphics -framework CoreServices -framework ImageIO -framework Metal -framework OpenGLES -framework AVFoundation -framework GameController -framework CoreMotion" # SDL2_image
 	)
 
 	set_target_properties(vcmiclient PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_LIST_DIR}/ios/Info.plist.in")
@@ -203,7 +203,13 @@ vcmi_set_output_dir(vcmiclient "")
 set_target_properties(vcmiclient PROPERTIES ${PCH_PROPERTIES})
 cotire(vcmiclient)
 
-install(TARGETS vcmiclient DESTINATION ${BIN_DIR})
+if(APPLE_IOS)
+	add_custom_command(TARGET vcmiclient POST_BUILD
+		COMMAND ${CMAKE_COMMAND} --install "${CMAKE_BINARY_DIR}" --config "$<CONFIG>" --prefix "$<TARGET_BUNDLE_CONTENT_DIR:vcmiclient>"
+	)
+else()
+	install(TARGETS vcmiclient DESTINATION ${BIN_DIR})
+endif()
 
 #install icons and desktop file on Linux
 if(NOT WIN32 AND NOT APPLE)
