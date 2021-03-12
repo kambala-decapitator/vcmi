@@ -142,6 +142,7 @@ if(APPLE_MACOS)
 endif(APPLE_MACOS)
 
 if(APPLE_IOS)
+	set(CMAKE_MACOSX_RPATH 1)
 	set(SYSTEM_LIBS ${SYSTEM_LIBS} iconv) # boost.locale
 endif(APPLE_IOS)
 
@@ -250,6 +251,10 @@ if(APPLE_IOS)
 endif()
 find_package(Boost 1.48.0 COMPONENTS date_time filesystem locale program_options system thread REQUIRED)
 find_package(ZLIB REQUIRED)
+# TODO: needed only for device+simulator
+# if(APPLE_IOS)
+# 	set(ZLIB_LIBRARIES "-lz")
+# endif()
 find_package(FFmpeg REQUIRED)
 find_package(Minizip)
 if(MINIZIP_FOUND)
