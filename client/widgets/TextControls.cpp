@@ -419,7 +419,9 @@ CTextInput::CTextInput(const Rect &Pos, EFonts font, const CFunctionList<void(co
 	captureAllKeys = true;
 	background.reset();
 	addUsedEvents(LCLICK | KEYBOARD | TEXTINPUT);
+    #ifndef VCMI_IOS
 	giveFocus();
+    #endif
 }
 
 CTextInput::CTextInput(const Rect & Pos, const Point & bgOffset, const std::string & bgName, const CFunctionList<void(const std::string &)> & CB)
@@ -431,7 +433,9 @@ CTextInput::CTextInput(const Rect & Pos, const Point & bgOffset, const std::stri
 	OBJ_CONSTRUCTION;
 	background = std::make_shared<CPicture>(bgName, bgOffset.x, bgOffset.y);
 	addUsedEvents(LCLICK | KEYBOARD | TEXTINPUT);
+    #ifndef VCMI_IOS
 	giveFocus();
+    #endif
 }
 
 CTextInput::CTextInput(const Rect & Pos, SDL_Surface * srf)
@@ -450,7 +454,9 @@ CTextInput::CTextInput(const Rect & Pos, SDL_Surface * srf)
 	pos.h = background->pos.h;
 	background->pos = pos;
 	addUsedEvents(LCLICK | KEYBOARD | TEXTINPUT);
+    #ifndef VCMI_IOS
 	giveFocus();
+    #endif
 }
 
 void CTextInput::focusGot()
