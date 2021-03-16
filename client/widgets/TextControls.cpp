@@ -459,6 +459,12 @@ CTextInput::CTextInput(const Rect & Pos, SDL_Surface * srf)
     #endif
 }
 
+CTextInput::~CTextInput()
+{
+	if (inputWithFocus == this)
+		focusLost();
+}
+
 void CTextInput::focusGot()
 {
 	CSDL_Ext::startTextInput(&pos);
@@ -656,7 +662,6 @@ CFocusable::~CFocusable()
 {
 	if(inputWithFocus == this)
 	{
-		focusLost();
 		inputWithFocus = nullptr;
 	}
 

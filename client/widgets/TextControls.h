@@ -145,7 +145,6 @@ class CFocusable : public virtual CIntObject
 {
 protected:
 	virtual void focusGot(){};
-	virtual void focusLost(){};
 public:
 	bool focus; //only one focusable control can have focus at one moment
 
@@ -166,7 +165,7 @@ protected:
 	std::string visibleText() override;
 
 	void focusGot() override;
-	void focusLost() override;
+	void focusLost();
 
 #ifdef VCMI_ANDROID
 	void notifyAndroidTextInputChanged(std::string & text);
@@ -179,6 +178,7 @@ public:
 	CTextInput(const Rect &Pos, EFonts font, const CFunctionList<void(const std::string &)> &CB);
 	CTextInput(const Rect &Pos, const Point &bgOffset, const std::string &bgName, const CFunctionList<void(const std::string &)> &CB);
 	CTextInput(const Rect &Pos, SDL_Surface *srf = nullptr);
+	~CTextInput();
 
 	void clickLeft(tribool down, bool previousState) override;
 	void keyPressed(const SDL_KeyboardEvent & key) override;
