@@ -97,6 +97,7 @@ void MainWindow::on_startGameButton_clicked()
 	startExecutable(pathToQString(VCMIDirs::get().clientPath()));
 }
 
+#ifndef Q_OS_IOS
 void MainWindow::startExecutable(QString name)
 {
 	QProcess process;
@@ -114,6 +115,6 @@ void MainWindow::startExecutable(QString name)
 		                      "Reason: " + process.errorString(),
 		                      QMessageBox::Ok,
 		                      QMessageBox::Ok);
-		return;
 	}
 }
+#endif
