@@ -322,14 +322,26 @@ void CModListView::selectMod(const QModelIndex & index)
 
 void CModListView::keyPressEvent(QKeyEvent * event)
 {
-	if(event->key() == Qt::Key_Escape && ui->modInfoWidget->isVisible())
+	switch(event->key())
 	{
+	case Qt::Key_Escape:
+		if(ui->modInfoWidget->isHidden())
+			break;
+
 		hideModInfo();
-	}
-	else
+		return;
+	case Qt::Key_Left:
 	{
-		return QWidget::keyPressEvent(event);
+		const auto parentIndex = filterModel->parent(ui->allModsView->currentIndex());
+		if(parentIndex.isValid())
+			ui->allModsView->setCurrentIndex(parentIndex);
+		return;
 	}
+	default:
+		break;
+	}
+
+	QWidget::keyPressEvent(event);
 }
 
 void CModListView::modSelected(const QModelIndex & current, const QModelIndex &)
