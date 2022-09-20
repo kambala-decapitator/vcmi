@@ -330,6 +330,8 @@ void CModListView::keyPressEvent(QKeyEvent * event)
 
 		hideModInfo();
 		return;
+	case Qt::Key_Space:
+		break;
 	default:
 		break;
 	}
