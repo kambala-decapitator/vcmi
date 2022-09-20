@@ -322,14 +322,19 @@ void CModListView::selectMod(const QModelIndex & index)
 
 void CModListView::keyPressEvent(QKeyEvent * event)
 {
-	if(event->key() == Qt::Key_Escape && ui->modInfoWidget->isVisible())
+	switch(event->key())
 	{
+	case Qt::Key_Escape:
+		if(ui->modInfoWidget->isHidden())
+			break;
+
 		hideModInfo();
+		return;
+	default:
+		break;
 	}
-	else
-	{
-		return QWidget::keyPressEvent(event);
-	}
+
+	QWidget::keyPressEvent(event);
 }
 
 void CModListView::modSelected(const QModelIndex & current, const QModelIndex &)
