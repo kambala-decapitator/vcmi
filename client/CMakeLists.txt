@@ -177,7 +177,7 @@ else()
 	add_executable(vcmiclient WIN32 ${client_SRCS} ${client_HEADERS} ${client_ICON})
 endif(ENABLE_DEBUG_CONSOLE)
 
-add_dependencies(vcmiclient vcmiserver BattleAI StupidAI VCAI Nullkiller)
+add_dependencies(vcmiclient vcmiserver BattleAI StupidAI VCAI)
 if(APPLE_IOS)
 	if(ENABLE_ERM)
 		add_dependencies(vcmiclient vcmiERM)

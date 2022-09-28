@@ -172,7 +172,7 @@ endif()
 
 if(APPLE_IOS)
 	set(CMAKE_MACOSX_RPATH 1)
-	set(CMAKE_OSX_DEPLOYMENT_TARGET 10.0)
+	set(CMAKE_OSX_DEPLOYMENT_TARGET 9.3)
 
 	list(APPEND CMAKE_FIND_ROOT_PATH "${CMAKE_PREFIX_PATH}") # required for Boost
 	set(CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH FALSE)
@@ -311,7 +311,7 @@ find_package(SDL2_ttf REQUIRED)
 if(TARGET SDL2_ttf::SDL2_ttf)
 	add_library(SDL2::TTF ALIAS SDL2_ttf::SDL2_ttf)
 endif()
-find_package(TBB REQUIRED)
+# find_package(TBB REQUIRED)
 
 if(ENABLE_LAUNCHER)
 	# Widgets finds its own dependencies (QtGui and QtCore).
