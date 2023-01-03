@@ -216,6 +216,9 @@
 			"water" : {
 				"index" : 0,
 				"aiValue" : 5000,
+				"templates" : {
+					"allowedTerrains": ["water"]
+				},
 				"rmg" : {
 					"zoneLimit" : 1,
 					"value" : 5000,
@@ -225,6 +228,17 @@
 			"land" : {
 				"index" : 1,
 				"aiValue" : 10000,
+				"templates" : {
+					"allowedTerrains": [
+						"dirt",
+						"grass",
+						"lava"
+						"rough",
+						"sand",
+						"snow",
+						"swamp"
+					]
+				},
 				"rmg" : {
 					"zoneLimit" : 1,
 					"value" : 10000,
@@ -234,6 +248,9 @@
 			"subterra" : {
 				"index" : 2,
 				"aiValue" : 7500,
+				"templates" : {
+					"allowedTerrains": ["subterra"]
+				},
 				"rmg" : {
 					"zoneLimit" : 1,
 					"value" : 7500,
