@@ -19,11 +19,6 @@
 #include <QObject>
 #include <QScroller>
 
-#ifdef VCMI_ANDROID
-#include <QAndroidJniObject>
-#include <QtAndroid>
-#endif
-
 #ifdef VCMI_IOS
 #include "ios/revealdirectoryinfiles.h"
 #include "iOS_utils.h"
@@ -77,8 +72,8 @@ QString getRealPath(QString path)
 #ifdef VCMI_ANDROID
 	if(path.contains("content://", Qt::CaseInsensitive))
 	{
-		auto str = QAndroidJniObject::fromString(path);
-		return QAndroidJniObject::callStaticObjectMethod("eu/vcmi/vcmi/util/FileUtil", "getFilenameFromUri", "(Ljava/lang/String;Landroid/content/Context;)Ljava/lang/String;", str.object<jstring>(), QtAndroid::androidContext().object()).toString();
+		auto str = QJNI_OBJECT_CLASS::fromString(path);
+		return QJNI_OBJECT_CLASS::callStaticObjectMethod("eu/vcmi/vcmi/util/FileUtil", "getFilenameFromUri", "(Ljava/lang/String;Landroid/content/Context;)Ljava/lang/String;", str.object<jstring>(), QT_ACTIVITY.object()).toString();
 	}
 	else
 		return path;
@@ -101,9 +96,9 @@ void performNativeCopy(QString src, QString dst)
 		return QString::fromUtf8(QUrl::toPercentEncoding(uri, "!#$&'()*+,/:;=?@[]<>{}\"`^~%"));
 	};
 
-	auto srcStr = QAndroidJniObject::fromString(safeEncode(src));
-	auto dstStr = QAndroidJniObject::fromString(safeEncode(dst));
-	QAndroidJniObject::callStaticObjectMethod("eu/vcmi/vcmi/util/FileUtil", "copyFileFromUri", "(Ljava/lang/String;Ljava/lang/String;Landroid/content/Context;)V", srcStr.object<jstring>(), dstStr.object<jstring>(), QtAndroid::androidContext().object());
+	auto srcStr = QJNI_OBJECT_CLASS::fromString(safeEncode(src));
+	auto dstStr = QJNI_OBJECT_CLASS::fromString(safeEncode(dst));
+	QJNI_OBJECT_CLASS::callStaticObjectMethod("eu/vcmi/vcmi/util/FileUtil", "copyFileFromUri", "(Ljava/lang/String;Ljava/lang/String;Landroid/content/Context;)V", srcStr.object<jstring>(), dstStr.object<jstring>(), QT_ACTIVITY.object());
 #else
 	QFile::copy(src, dst);
 #endif
@@ -127,13 +122,12 @@ MainWindow * getMainWindow()
 	return nullptr;
 }
 
-
 void keepScreenOn(bool isEnabled)
 {
 #if defined(VCMI_ANDROID)
-	QtAndroid::runOnAndroidThread([isEnabled]
+	RUN_ON_ANDROID_MAIN_THREAD([isEnabled]
 	{
-		QtAndroid::androidActivity().callMethod<void>("keepScreenOn", "(Z)V", isEnabled);
+		JNI_CALL_METHOD(QT_ACTIVITY, void, "keepScreenOn", "(Z)V", isEnabled);
 	});
 #elif defined(VCMI_IOS)
 	iOS_utils::keepScreenOn(isEnabled);

@@ -26,8 +26,6 @@
 int argcForClient;
 char ** argvForClient;
 #elif defined(VCMI_ANDROID)
-# include <QAndroidJniObject>
-# include <QtAndroid>
 #else
 # include <QMessageBox>
 # include <QProcess>
@@ -102,7 +100,7 @@ void startGame(const QStringList & args)
 	}
 	qApp->quit();
 #elif defined(VCMI_ANDROID)
-	QtAndroid::androidActivity().callMethod<void>("onLaunchGameBtnPressed");
+	QT_ACTIVITY.callMethod<void>("onLaunchGameBtnPressed");
 #else
 	startExecutable(pathToQString(VCMIDirs::get().clientPath()), args);
 #endif

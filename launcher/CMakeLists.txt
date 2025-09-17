@@ -30,9 +30,7 @@ set(launcher_SRCS
 if(IOS)
 	list(APPEND launcher_SRCS
 		ios/launchGame.m
-		ios/revealdirectoryinfiles.h
 		ios/revealdirectoryinfiles.mm
-		ios/selectdirectory.h
 		ios/selectdirectory.mm
 		prepare_ios.mm
 	)
@@ -66,6 +64,16 @@ set(launcher_HEADERS
 		prepare.h
 		prepare_p.h
 )
+if(IOS)
+	list(APPEND launcher_HEADERS
+		ios/revealdirectoryinfiles.h
+		ios/selectdirectory.h
+	)
+elseif(ANDROID)
+	list(APPEND launcher_HEADERS
+		android/qtcompat.h
+	)
+endif()
 
 set(launcher_FORMS
 		aboutProject/aboutproject_moc.ui
@@ -208,14 +216,6 @@ if(WIN32)
 			OUTPUT_NAME "VCMI_launcher"
 			PROJECT_LABEL "VCMI_launcher"
 	)
-
-	# FIXME: Can't to get CMP0020 working with Vcpkg and CMake 3.8.2
-	# So far I tried:
-	# - cmake_minimum_required set to 2.8.11 globally and in this file
-	# - cmake_policy in all possible places
-	# - used NO_POLICY_SCOPE to make sure no other parts reset policies
-	# Still nothing worked, warning kept appearing and WinMain didn't link automatically
-	target_link_libraries(vcmilauncher Qt${QT_VERSION_MAJOR}::WinMain)
 endif()
 
 if(APPLE)
@@ -223,7 +223,7 @@ if(APPLE)
 	set_property(GLOBAL PROPERTY AUTOGEN_TARGETS_FOLDER vcmilauncher)
 endif()
 
-if(ANDROID)
+if(ANDROID AND QT_VERSION_MAJOR EQUAL 5)
 	target_link_libraries(vcmilauncher Qt${QT_VERSION_MAJOR}::AndroidExtras)
 elseif(NOT IOS)
 	target_link_libraries(vcmilauncher SDL2::SDL2)

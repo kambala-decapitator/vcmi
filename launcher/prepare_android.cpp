@@ -15,9 +15,12 @@
 #include <QFile>
 #include <QFileInfo>
 
-#include <QAndroidJniEnvironment>
-#include <QAndroidJniObject>
-#include <QtAndroid>
+#if __has_include(<QJniEnvironment>)
+# include <QJniEnvironment>
+# define HAS_QJNI_ENVIRONMENT 1
+#else
+# include <QAndroidJniEnvironment>
+#endif
 
 namespace
 {
@@ -52,15 +55,19 @@ namespace launcher
 {
 void prepareAndroid()
 {
+#if HAS_QJNI_ENVIRONMENT
+	CAndroidVMHelper::initClassloader(QJniEnvironment::getJniEnv());
+#else
 	QAndroidJniEnvironment jniEnv;
 	CAndroidVMHelper::initClassloader(static_cast<JNIEnv *>(jniEnv));
+#endif
 
-	const bool justLaunched = QtAndroid::androidActivity().getField<jboolean>("justLaunched") == JNI_TRUE;
+	const bool justLaunched = QT_ACTIVITY.getField<jboolean>("justLaunched") == JNI_TRUE;
 	if(!justLaunched)
 		return;
 
 	// copy core data to internal directory
-	const auto vcmiDir = QAndroidJniObject::callStaticObjectMethod<jstring>("eu/vcmi/vcmi/NativeMethods", "internalDataRoot").toString();
+	const auto vcmiDir = QJNI_OBJECT_CLASS::callStaticObjectMethod<jstring>("eu/vcmi/vcmi/NativeMethods", "internalDataRoot").toString();
 	for(auto vcmiFilesResource : {QLatin1String{"config"}, QLatin1String{"Mods"}})
 	{
 		QDir destDir = QString{"%1/%2"}.arg(vcmiDir, vcmiFilesResource);

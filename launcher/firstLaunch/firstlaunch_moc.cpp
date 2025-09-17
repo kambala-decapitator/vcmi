@@ -29,9 +29,6 @@
 
 #include "iOS_utils.h"
 #elif defined(VCMI_ANDROID)
-#include <QAndroidJniObject>
-#include <QtAndroid>
-
 static FirstLaunchView * thiz;
 extern "C" JNIEXPORT void JNICALL Java_eu_vcmi_vcmi_NativeMethods_heroesDataUpdate(JNIEnv * env, jclass cls)
 {
@@ -121,7 +118,7 @@ void FirstLaunchView::on_pushButtonDataCopy_clicked()
 {
 #ifdef VCMI_ANDROID
 	thiz = this;
-	QtAndroid::androidActivity().callMethod<void>("copyHeroesData");
+	QT_ACTIVITY.callMethod<void>("copyHeroesData");
 #else
 	// iOS can't display modal dialogs when called directly on button press
 	// https://bugreports.qt.io/browse/QTBUG-98651
@@ -230,7 +227,7 @@ void FirstLaunchView::heroesDataMissing()
 
 #ifdef VCMI_ANDROID
 	// selecting directory with ACTION_OPEN_DOCUMENT_TREE is available only since API level 21
-	const bool canUseDataCopy = QtAndroid::androidSdkVersion() >= 21;
+	const bool canUseDataCopy = ANDROID_SDK_VERSION >= 21;
 #elif defined(VCMI_IOS)
 	// selecting directory through UIDocumentPickerViewController is available only since iOS 13
 	const bool canUseDataCopy = iOS_utils::isOsVersionAtLeast(13);
