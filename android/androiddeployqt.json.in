@@ -1,7 +1,7 @@
 {
 	"android-min-sdk-version": "@CMAKE_ANDROID_API@",
 	"android-package-source-directory": "@androidPackageSourceDir@",
-	"android-target-sdk-version": "@ANDROID_TARGET_SDK_VERSION@",
+	"android-target-sdk-version": "@QT_ANDROID_TARGET_SDK_VERSION@",
 	"application-binary": "vcmiclient",
 	"architectures": {
 		"@ANDROID_ABI@": "@ANDROID_SYSROOT_LIB_SUBDIR@"

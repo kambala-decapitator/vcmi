@@ -35,7 +35,11 @@ endif()
 
 target_link_libraries(vcmiclient PRIVATE vcmiclientcommon)
 
-if(ENABLE_SINGLE_APP_BUILD AND ENABLE_LAUNCHER)
+# CMake Error at clientapp/CMakeLists.txt:39 (target_link_libraries):
+#   Target "vcmilauncher" of type MODULE_LIBRARY may not be linked into another
+#   target.  One may link only to INTERFACE, OBJECT, STATIC or SHARED
+#   libraries, or to executables with the ENABLE_EXPORTS property set.
+if(NOT (QT_VERSION_MAJOR GREATER_EQUAL 6 AND ANDROID) AND ENABLE_SINGLE_APP_BUILD AND ENABLE_LAUNCHER)
 	target_link_libraries(vcmiclient PRIVATE vcmilauncher)
 endif()
 
@@ -91,13 +95,17 @@ if(IOS)
 	)
 	install(TARGETS vcmiclient DESTINATION Payload COMPONENT app) # for ipa generation with cpack
 elseif(ANDROID)
-	find_program(androidDeployQt androiddeployqt
-		PATHS "${qtBinDir}"
-	)
+	# if(TARGET Qt${QT_VERSION_MAJOR}::androiddeployqt)
+	# 	get_target_property(androidDeployQt Qt${QT_VERSION_MAJOR}::androiddeployqt IMPORTED_LOCATION)
+	# else()
+	# 	find_program(androidDeployQt androiddeployqt
+	# 		PATHS "${qtBinDir}"
+	# 	)
+	# endif()
 	add_custom_target(android_deploy ALL
 		COMMAND ${CMAKE_COMMAND} --install "${CMAKE_BINARY_DIR}" --config "$<CONFIG>" --prefix "${androidQtBuildDir}"
-		COMMAND ${CMAKE_COMMAND} -E env "ORG_GRADLE_PROJECT_SDL_JAVA_SRC_DIR=${SDL_JAVA_SRC_DIR}" --
-			"${androidDeployQt}" --input "${CMAKE_BINARY_DIR}/androiddeployqt.json" --output "${androidQtBuildDir}" --android-platform "android-${ANDROID_TARGET_SDK_VERSION}" --verbose $<$<NOT:$<CONFIG:Debug>>:--release> ${ANDROIDDEPLOYQT_OPTIONS}
+		# COMMAND ${CMAKE_COMMAND} -E env "ORG_GRADLE_PROJECT_SDL_JAVA_SRC_DIR=${SDL_JAVA_SRC_DIR}" --
+		# 	"${androidDeployQt}" --input "${CMAKE_BINARY_DIR}/androiddeployqt.json" --output "${androidQtBuildDir}" --android-platform "android-${QT_ANDROID_TARGET_SDK_VERSION}" --verbose $<$<NOT:$<CONFIG:Debug>>:--release> ${ANDROIDDEPLOYQT_OPTIONS}
 		COMMAND_EXPAND_LISTS
 		VERBATIM
 		COMMENT "Create android package"

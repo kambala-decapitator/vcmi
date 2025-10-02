@@ -159,7 +159,10 @@ endif()
 # to always look for includes there:
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-if(ENABLE_SINGLE_APP_BUILD OR ANDROID)
+if(QT_VERSION_MAJOR GREATER_EQUAL 6)
+	qt_add_executable(vcmilauncher WIN32 ${launcher_QM} ${launcher_ICON})
+	vcmi_create_exe_shim(vcmilauncher)
+elseif(ENABLE_SINGLE_APP_BUILD OR ANDROID)
 	add_library(vcmilauncher OBJECT ${launcher_QM})
 else()
 	add_executable(vcmilauncher WIN32 ${launcher_QM} ${launcher_ICON})
@@ -177,9 +180,11 @@ if(ENABLE_TRANSLATIONS)
 endif()
 
 if(ANDROID)
+	# Qt 6 requirement
+    get_target_property(targetBinaryDir vcmilauncher BINARY_DIR)
+	set(androidQtBuildDir "${targetBinaryDir}/android-build" PARENT_SCOPE)
+
 	get_target_property(rccPath Qt${QT_VERSION_MAJOR}::rcc IMPORTED_LOCATION)
-	get_filename_component(qtDir "${rccPath}/../../" ABSOLUTE)
-	set(qtDir "${qtDir}" PARENT_SCOPE)
  
 	function(generate_binary_resource resourceName resourceDir)
 		file(CREATE_LINK "${resourceDir}" "${CMAKE_CURRENT_BINARY_DIR}/${resourceName}"
@@ -216,6 +221,11 @@ if(WIN32)
 			OUTPUT_NAME "VCMI_launcher"
 			PROJECT_LABEL "VCMI_launcher"
 	)
+elseif(ANDROID)
+	set_target_properties(vcmilauncher
+		PROPERTIES
+			QT_ANDROID_PACKAGE_SOURCE_DIR "${androidPackageSourceDir}"
+	)
 endif()
 
 if(APPLE)
@@ -224,16 +234,16 @@ if(APPLE)
 endif()
 
 if(ANDROID AND QT_VERSION_MAJOR EQUAL 5)
-	target_link_libraries(vcmilauncher Qt${QT_VERSION_MAJOR}::AndroidExtras)
+	target_link_libraries(vcmilauncher PUBLIC Qt${QT_VERSION_MAJOR}::AndroidExtras)
 elseif(NOT IOS)
-	target_link_libraries(vcmilauncher SDL2::SDL2)
+	target_link_libraries(vcmilauncher PUBLIC SDL2::SDL2)
 endif()
 
 if(ENABLE_STATIC_LIBS OR NOT (ENABLE_EDITOR AND ENABLE_LAUNCHER))
 	target_compile_definitions(vcmilauncher PRIVATE VCMIQT_STATIC)
 endif()
 
-target_link_libraries(vcmilauncher vcmi vcmiqt Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network)
+target_link_libraries(vcmilauncher PUBLIC vcmi vcmiqt Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network)
 target_include_directories(vcmilauncher
 	PUBLIC	${CMAKE_CURRENT_SOURCE_DIR}
 )
@@ -242,11 +252,11 @@ enable_pch(vcmilauncher)
 
 if(ENABLE_INNOEXTRACT)
 	target_compile_definitions(vcmilauncher PRIVATE ENABLE_INNOEXTRACT)
-	target_link_libraries(vcmilauncher innoextract)
+	target_link_libraries(vcmilauncher PUBLIC innoextract)
 endif()
 
 if(IOS)
-	target_link_libraries(vcmilauncher
+	target_link_libraries(vcmilauncher PUBLIC
 		iOS_utils
 		"-framework UniformTypeIdentifiers"
 	)
@@ -256,7 +266,7 @@ if(IOS)
 		file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/QIOSIntegrationPlugin.h
 			"#include <QtPlugin>\nQ_IMPORT_PLUGIN(QIOSIntegrationPlugin)"
 		)
-		target_link_libraries(vcmilauncher
+		target_link_libraries(vcmilauncher PUBLIC
 			Qt${QT_VERSION_MAJOR}::QIOSIntegrationPlugin
 			qt::QIOSIntegrationPlugin
 		)

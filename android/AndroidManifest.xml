@@ -22,7 +22,7 @@
 		android:xlargeScreens="true" />
 
 	<application
-		android:name="org.qtproject.qt5.android.bindings.QtApplication"
+		android:name="org.qtproject.qt.android.bindings.QtApplication"
 		android:hardwareAccelerated="true"
 		android:hasFragileUserData="true"
 		android:allowBackup="false"
@@ -47,7 +47,7 @@
 			<meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" /> 
 
 			<meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
-			<meta-data android:name="android.app.qt_sources_resource_id" android:resource="@array/qt_sources"/>
+			<!-- <meta-data android:name="android.app.qt_sources_resource_id" android:resource="@array/qt_sources"/> -->
 			<meta-data android:name="android.app.repository" android:value="default"/>
 			<meta-data android:name="android.app.qt_libs_resource_id" android:resource="@array/qt_libs"/>
 			<meta-data android:name="android.app.bundled_libs_resource_id" android:resource="@array/bundled_libs"/>
@@ -61,10 +61,10 @@
 			<meta-data android:name="android.app.static_init_classes" android:value="-- %%INSERT_INIT_CLASSES%% --"/>
 
 			<!--  Messages maps -->
-			<meta-data android:value="@string/ministro_not_found_msg" android:name="android.app.ministro_not_found_msg"/>
-			<meta-data android:value="@string/ministro_needed_msg" android:name="android.app.ministro_needed_msg"/>
+			<!-- <meta-data android:value="@string/ministro_not_found_msg" android:name="android.app.ministro_not_found_msg"/> -->
+			<!-- <meta-data android:value="@string/ministro_needed_msg" android:name="android.app.ministro_needed_msg"/> -->
 			<meta-data android:value="@string/fatal_error_msg" android:name="android.app.fatal_error_msg"/>
-			<meta-data android:value="@string/unsupported_android_version" android:name="android.app.unsupported_android_version"/>
+			<!-- <meta-data android:value="@string/unsupported_android_version" android:name="android.app.unsupported_android_version"/> -->
 			<!--  Messages maps -->
 
 			<!-- Background running -->

@@ -62,7 +62,7 @@ option(ENABLE_CCACHE "Speed up recompilation by caching previous compilations" O
 # Platform-specific options
 
 if(ANDROID)
-	set(ANDROID_TARGET_SDK_VERSION "35" CACHE STRING "Android target SDK version")
+	set(QT_ANDROID_TARGET_SDK_VERSION "35" CACHE STRING "Android target SDK version")
 	set(ANDROIDDEPLOYQT_OPTIONS "" CACHE STRING "Additional androiddeployqt options separated by semi-colon")
 	set(ANDROID_GRADLE_PROPERTIES "" CACHE STRING "Additional Gradle properties separated by semi-colon")
 
@@ -508,6 +508,7 @@ if (ENABLE_CLIENT)
 	endif()
 
 	find_package(SDL2 REQUIRED)
+
 	find_package(SDL2_image REQUIRED)
 	if(TARGET SDL2_image::SDL2_image)
 		add_library(SDL2::Image ALIAS SDL2_image::SDL2_image)
@@ -515,13 +516,14 @@ if (ENABLE_CLIENT)
 	if(TARGET SDL2_image::SDL2_image-static)
 		add_library(SDL2::Image ALIAS SDL2_image::SDL2_image-static)
 	endif()
+
 	find_package(SDL2_mixer REQUIRED)
 	if(TARGET SDL2_mixer::SDL2_mixer)
 		add_library(SDL2::Mixer ALIAS SDL2_mixer::SDL2_mixer)
-	endif()
-	if(TARGET SDL2_mixer::SDL2_mixer-static)
+	elseif(TARGET SDL2_mixer::SDL2_mixer-static)
 		add_library(SDL2::Mixer ALIAS SDL2_mixer::SDL2_mixer-static)
 	endif()
+
 	find_package(SDL2_ttf REQUIRED)
 	if(TARGET SDL2_ttf::SDL2_ttf)
 		add_library(SDL2::TTF ALIAS SDL2_ttf::SDL2_ttf)
@@ -536,6 +538,7 @@ if(ENABLE_LOBBY)
 endif()
 
 if(ENABLE_LAUNCHER OR ENABLE_EDITOR)
+	# TODO
 	# Widgets finds its own dependencies (QtGui and QtCore).
 	find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Network)
 	find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Network)
@@ -553,6 +556,10 @@ if(ENABLE_LAUNCHER OR ENABLE_EDITOR)
 	if(ENABLE_TRANSLATIONS)
 		find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS LinguistTools)
 		add_definitions(-DENABLE_QT_TRANSLATIONS)
+	endif()
+
+	if(QT_KNOWN_POLICY_QTP0002)
+		qt_policy(SET QTP0002 NEW)
 	endif()
 endif()
 
@@ -619,8 +626,9 @@ elseif(ANDROID)
 
 	# required by Qt
 	set(androidPackageSourceDir "${CMAKE_SOURCE_DIR}/android")
-	set(androidQtBuildDir "${CMAKE_BINARY_DIR}/android-build")
-	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${androidQtBuildDir}/${LIB_DIR}")
+	# TODO: CMAKE_LIBRARY_OUTPUT_DIRECTORY only for Qt 5?
+	# set(androidQtBuildDir "${CMAKE_BINARY_DIR}/android-build")
+	# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${androidQtBuildDir}/${LIB_DIR}")
 else()
 	# includes lib path which determines where to install shared libraries (either /lib or /lib64)
 	include(GNUInstallDirs)
@@ -726,6 +734,14 @@ endif()
 if(ENABLE_TEST)
 	enable_testing()
 	add_subdirectory(test)
+endif()
+
+if(ANDROID)
+	add_custom_target(buildApk
+		${CMAKE_COMMAND} -E env "ORG_GRADLE_PROJECT_SDL_JAVA_SRC_DIR=${SDL_JAVA_SRC_DIR}" --
+			${CMAKE_COMMAND} --build . --target apk
+		VERBATIM USES_TERMINAL
+	)
 endif()
 
 #######################################
