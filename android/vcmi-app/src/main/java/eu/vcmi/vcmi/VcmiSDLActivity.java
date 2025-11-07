@@ -70,21 +70,11 @@ public class VcmiSDLActivity extends SDLActivity
     }
 
     @Override
-    public void loadLibraries()
-    {
-        LibsLoader.loadClientLibs(this);
-    }
-
-    @Override
     protected String[] getLibraries() {
         // app main library and SDL are loaded when launcher starts, no extra work to do
         return new String[] {
+            LibsLoader.CLIENT_LIB,
         };
-    }
-
-    @Override
-    protected String getMainSharedObject() {
-        return String.format("%s/lib%s.so", getContext().getApplicationInfo().nativeLibraryDir, LibsLoader.CLIENT_LIB);
     }
 
     @Override
