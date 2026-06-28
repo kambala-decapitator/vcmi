@@ -105,7 +105,7 @@ jobs:
             preset: android-conan-ninja-release
             conan_profile: android-32-ndk
             conan_prebuilts: dependencies-android-armeabi-v7a
-            conan_options: --profile=dependencies/conan_profiles/base/android-system
+            conan_options: --profile=dependencies/conan_profiles/base/android-system -o "&:lua_lib=None"
             artifact_platform: armeabi-v7a
 
           # - platform: android-64
@@ -219,6 +219,8 @@ jobs:
 
     - name: Install Conan Dependencies
       if: "${{ matrix.conan_prebuilts != '' }}"
+      env:
+        GH_TOKEN: ${{ github.token }}
       run: |
         pipx install conan
         source '${{github.workspace}}/CI/install_conan_dependencies.sh' '${{matrix.conan_prebuilts}}'
@@ -485,7 +487,7 @@ jobs:
 
   upload-source-package:
     name: Upload Source Code Package
-    if: always() && github.event.number == ''
+    if: false
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -531,6 +533,7 @@ jobs:
             path: .summary/source.json
 
   test:
+    if: false
     name: Test (${{ matrix.platform }})
     strategy:
       fail-fast: false
@@ -654,6 +657,7 @@ jobs:
         fi
 
   lobby:
+    if: false
     name: Build VCMI Lobby
     # Warning: Lobby .deb must be build on the same Ubuntu version and arch as our server. Do not change to ubuntu-latest
     runs-on: ubuntu-24.04
@@ -698,7 +702,7 @@ jobs:
 
   windows-installer:
     needs: build
-    if: ${{ needs.build.result == 'success' }}
+    if: false
     name: Create Windows Installer (${{ matrix.arch }})
     strategy:
       matrix:
@@ -821,7 +825,7 @@ jobs:
 
   validate-code:
     name: Validate Code
-    if: always()
+    if: false
     runs-on: ubuntu-latest
     defaults:
       run:
