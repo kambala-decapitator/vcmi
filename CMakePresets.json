@@ -374,6 +374,7 @@
             ],
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+                "ENABLE_MMAI": "OFF",
                 "ANDROIDDEPLOYQT_OPTIONS" : "--aab"
             }
         },
