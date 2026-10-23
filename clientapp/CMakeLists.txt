@@ -25,9 +25,9 @@ assign_source_group(${clientapp_SRCS} ${clientapp_HEADERS})
 
 if(ANDROID)
 	add_library(vcmiclient SHARED ${clientapp_SRCS} ${clientapp_HEADERS})
-	set_target_properties(vcmiclient PROPERTIES
-		OUTPUT_NAME "vcmiclient_${ANDROID_ABI}" # required by Qt
-	)
+	# set_target_properties(vcmiclient PROPERTIES
+	# 	OUTPUT_NAME "vcmiclient_${ANDROID_ABI}" # required by Qt
+	# )
 	# ffmpeg requires -Bsymbolic on 64-bit Android for assembler functions to compile
 	if(ANDROID_ABI STREQUAL "arm64-v8a" OR ANDROID_ABI STREQUAL "x86_64")
 		target_link_options(vcmiclient PRIVATE -Wl,-Bsymbolic)
@@ -121,13 +121,12 @@ if(IOS)
 	)
 	install(TARGETS vcmiclient DESTINATION Payload COMPONENT app) # for ipa generation with cpack
 elseif(ANDROID)
-	find_program(androidDeployQt androiddeployqt
-		PATHS "${qtBinDir}"
-	)
+	# find_program(androidDeployQt androiddeployqt
+	# 	PATHS "${qtBinDir}"
+	# )
 	add_custom_target(android_deploy ALL
 		COMMAND ${CMAKE_COMMAND} --install "${CMAKE_BINARY_DIR}" --config "$<CONFIG>" --prefix "${androidQtBuildDir}"
-		COMMAND ${CMAKE_COMMAND} -E env "ORG_GRADLE_PROJECT_SDL_JAVA_SRC_DIR=${SDL_JAVA_SRC_DIR}" --
-			"${androidDeployQt}" --input "${CMAKE_BINARY_DIR}/androiddeployqt.json" --output "${androidQtBuildDir}" --android-platform "android-${ANDROID_TARGET_SDK_VERSION}" --verbose $<$<NOT:$<CONFIG:Debug>>:--release> ${ANDROIDDEPLOYQT_OPTIONS}
+		# "${androidDeployQt}" --input "${CMAKE_BINARY_DIR}/androiddeployqt.json" --output "${androidQtBuildDir}" --android-platform "android-${ANDROID_TARGET_SDK_VERSION}" --verbose $<$<NOT:$<CONFIG:Debug>>:--release> ${ANDROIDDEPLOYQT_OPTIONS}
 		COMMAND_EXPAND_LISTS
 		VERBATIM
 		COMMENT "Create android package"

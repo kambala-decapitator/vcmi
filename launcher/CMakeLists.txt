@@ -196,8 +196,8 @@ endif()
 
 if(ANDROID)
 	get_target_property(rccPath Qt${QT_VERSION_MAJOR}::rcc IMPORTED_LOCATION)
-	get_filename_component(qtDir "${rccPath}/../../" ABSOLUTE)
-	set(qtDir "${qtDir}" PARENT_SCOPE)
+	# get_filename_component(qtDir "${rccPath}/../../" ABSOLUTE)
+	# set(qtDir "${qtDir}" PARENT_SCOPE)
  
 	function(generate_binary_resource resourceName resourceDir)
 		file(CREATE_LINK "${resourceDir}" "${CMAKE_CURRENT_BINARY_DIR}/${resourceName}"
@@ -304,12 +304,12 @@ if(IOS)
 		)
 	endif()
 elseif(ANDROID)
-	set(androidSdkDir "$ENV{ANDROID_HOME}")
-	configure_file(
-		"${androidPackageSourceDir}/androiddeployqt.json.in"
-		"${CMAKE_BINARY_DIR}/androiddeployqt.json"
-		@ONLY
-	)
+	# set(androidSdkDir "$ENV{ANDROID_HOME}")
+	# configure_file(
+	# 	"${androidPackageSourceDir}/androiddeployqt.json.in"
+	# 	"${CMAKE_BINARY_DIR}/androiddeployqt.json"
+	# 	@ONLY
+	# )
 else()
 	install(TARGETS vcmilauncher DESTINATION ${BIN_DIR})
 

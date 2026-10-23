@@ -46,6 +46,18 @@ void HdExtractor::installHd()
 
 	if(tmpDir.isEmpty())
 	{
+		// if(Helper::canUseFolderPicker())
+		// {
+		// 	Helper::nativeFolderPicker(view, [view, outPath](QString picked)
+		// 	{
+		// 		if(picked.isEmpty())
+		// 			return;
+
+		// 		const QString destination = Helper::createFile(picked, QStringLiteral("vcmi-logs.zip"), QStringLiteral("application/zip"));
+		// 		saveLogArchiveToDestination(view, outPath, destination);
+		// 	});
+		// 	return;
+		// }
 		tmpDir = QFileDialog::getExistingDirectory(parent, tr("Select Directory with HD Edition (Steam folder)"), QDir::homePath(), QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
 		if(tmpDir.isEmpty())
 			return;
