@@ -58,10 +58,14 @@ set(editor_SRCS
 		campaigneditor/scenarioproperties.cpp
 		campaigneditor/startingbonus.cpp
 		campaigneditor/campaignview.cpp
-		androidfilepicker.cpp
 		editorfiledialog.cpp
 		maplayerselectiondialog.cpp
 )
+if(ANDROID)
+	list(APPEND editor_SRCS
+		androidfilepicker.cpp
+	)
+endif()
 if(ENABLE_TEMPLATE_EDITOR)
 	set(editor_SRCS
 		${editor_SRCS}
@@ -142,9 +146,13 @@ set(editor_HEADERS
 		campaigneditor/scenarioproperties.h
 		campaigneditor/startingbonus.h
 		campaigneditor/campaignview.h
-		androidfilepicker.h
 		editorfiledialog.h
 )
+if(ANDROID)
+	list(APPEND editor_HEADERS
+		androidfilepicker.h
+	)
+endif()
 if(ENABLE_TEMPLATE_EDITOR)
 	set(editor_HEADERS
 		${editor_HEADERS}
@@ -365,11 +373,15 @@ endif()
 
 target_link_libraries(vcmieditor vcmi vcmiqt Qt${QT_VERSION_MAJOR}::Widgets)
 if(ANDROID)
-	target_link_libraries(vcmieditor Qt${QT_VERSION_MAJOR}::AndroidExtras)
+	if(QT_VERSION_MAJOR GREATER_EQUAL 6)
+		target_link_libraries(vcmieditor Qt${QT_VERSION_MAJOR}::CorePrivate)
+	else()
+		target_link_libraries(vcmieditor Qt5::AndroidExtras)
+	endif()
 endif()
 if(ENABLE_TEMPLATE_EDITOR)
 	target_link_libraries(vcmieditor vcmi vcmiqt Qt${QT_VERSION_MAJOR}::Svg Qt${QT_VERSION_MAJOR}::Xml)
-	if(QT_VERSION_MAJOR EQUAL 6)
+	if(QT_VERSION_MAJOR GREATER_EQUAL 6)
 		target_link_libraries(vcmieditor vcmi vcmiqt Qt6::SvgWidgets)
 	endif()
 endif()

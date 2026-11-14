@@ -10,9 +10,6 @@
 #include "StdInc.h"
 #include "deviceinfo.h"
 
-#if defined(VCMI_ANDROID)
-#include <QAndroidJniObject>
-#endif
 #if defined(VCMI_IOS)
 #include "ios/iOS_utils.h"
 #endif
@@ -28,12 +25,12 @@ QString DeviceInfo::generateReport()
 	ts << "CPU architecture: " << QSysInfo::currentCpuArchitecture() << '\n';
 	ts << "Qt version: " << QT_VERSION_STR << '\n';
 #if defined(VCMI_ANDROID)
-	QString model = QAndroidJniObject::getStaticObjectField(
+	QString model = QJNI_OBJECT_CLASS::getStaticObjectField(
 		"android/os/Build",
 		"MODEL",
 		"Ljava/lang/String;"
 	).toString();
-	QString manufacturer = QAndroidJniObject::getStaticObjectField(
+	QString manufacturer = QJNI_OBJECT_CLASS::getStaticObjectField(
 		"android/os/Build",
 		"MANUFACTURER",
 		"Ljava/lang/String;"

@@ -26,6 +26,9 @@
 
 #include "../vcmiqt/convpathqstring.h"
 
+#ifdef VCMI_ANDROID
+#include "../launcher/android/qtcompat.h"
+#endif
 
 using NumericPointer = typename std::conditional_t<sizeof(void *) == sizeof(unsigned long long),
 												 unsigned long long, unsigned int>;

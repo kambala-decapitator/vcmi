@@ -17,7 +17,7 @@ File absolutePath(String fileName) {
 	return new File(rootProject.projectDir, fileName)
 }
 
-// androiddeployqt requires presence of package attribute, but AGP 8.0+ requires it to be absent
+// Qt 5 androiddeployqt requires presence of package attribute, but AGP 8.0+ requires it to be absent
 def xmlFile = absolutePath('AndroidManifest.xml')
 def xml = new XmlParser().parse(xmlFile)
 xml.attributes().remove('package')

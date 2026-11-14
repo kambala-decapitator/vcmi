@@ -9,15 +9,11 @@
  */
 #include "StdInc.h"
 #include "prepare_p.h"
-#include "../lib/CAndroidVMHelper.h"
+#include "android/androidutils.h"
 
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-
-#include <QAndroidJniEnvironment>
-#include <QAndroidJniObject>
-#include <QtAndroid>
 
 namespace
 {
@@ -52,15 +48,14 @@ namespace launcher
 {
 void prepareAndroid()
 {
-	QAndroidJniEnvironment jniEnv;
-	CAndroidVMHelper::initClassloader(static_cast<JNIEnv *>(jniEnv));
+	android::initClassloader();
 
-	const bool justLaunched = QtAndroid::androidActivity().getField<jboolean>("justLaunched") == JNI_TRUE;
+	const bool justLaunched = QT_ACTIVITY.getField<jboolean>("justLaunched") == JNI_TRUE;
 	if(!justLaunched)
 		return;
 
 	// copy core data to internal directory
-	const auto vcmiDir = QAndroidJniObject::callStaticObjectMethod<jstring>("eu/vcmi/vcmi/NativeMethods", "internalDataRoot").toString();
+	const auto vcmiDir = QJNI_OBJECT_CLASS::callStaticObjectMethod<jstring>("eu/vcmi/vcmi/NativeMethods", "internalDataRoot").toString();
 	for(auto vcmiFilesResource : {QLatin1String{"config"}, QLatin1String{"Mods"}, QLatin1String{"scripts"}})
 	{
 		QDir destDir = QString{"%1/%2"}.arg(vcmiDir, vcmiFilesResource);

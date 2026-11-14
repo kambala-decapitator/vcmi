@@ -23,7 +23,7 @@ import java.util.concurrent.CountDownLatch;
 
 import eu.vcmi.vcmi.util.FileUtil;
 
-public class ActivityMapEditor extends org.qtproject.qt5.android.bindings.QtActivity
+public class ActivityMapEditor extends org.qtproject.qt.android.bindings.QtActivity
 {
 	// Prevents prepareAndroid() from re-copying APK assets (launcher already did it)
 	public boolean justLaunched = false;

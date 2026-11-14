@@ -24,11 +24,6 @@
 using namespace MapEditor;
 #endif
 
-#ifdef VCMI_ANDROID
-#include <QAndroidJniObject>
-#include <QtAndroid>
-#endif
-
 #include "../../lib/VCMIDirs.h"
 #include "../../lib/campaign/CampaignHandler.h"
 #include "../../lib/campaign/CampaignRegionsHandler.h"
@@ -171,15 +166,7 @@ void CampaignEditor::redraw()
 
 bool CampaignEditor::getAnswerAboutUnsavedChanges()
 {
-	if(unsaved)
-	{
-		auto sure = QMessageBox::question(this, tr("Confirmation"), tr("Unsaved changes will be lost, are you sure?"));
-		if(sure == QMessageBox::No)
-		{
-			return false;
-		}
-	}
-	return true;
+	return Helper::getAnswerAboutUnsavedChanges(this, unsaved);
 }
 
 void CampaignEditor::setTitle()
@@ -417,11 +404,11 @@ void CampaignEditor::closeEvent(QCloseEvent *event)
 	if(getAnswerAboutUnsavedChanges())
 	{
 		QWidget::closeEvent(event);
-#ifdef VCMI_ANDROID
+#if 0//def VCMI_ANDROID
 		QApplication::quit();
-		QAndroidJniObject activity = QtAndroid::androidActivity();
+		QJNI_OBJECT_CLASS activity = QT_ACTIVITY;
 		if(activity.isValid())
-			activity.callMethod<void>("finishAffinity");
+			JNI_CALL_METHOD(activity, void, "finishAffinity");
 #else
 		parentWidget()->show();
 #endif

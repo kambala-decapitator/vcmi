@@ -9,18 +9,13 @@
  */
 #include "StdInc.h"
 #include "androidfilepicker.h"
-
-#ifdef VCMI_ANDROID
+#include "../launcher/android/androidutils.h"
 
 #include <QFileDialog>
 #include <QDir>
 #include <QMessageBox>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QWidget>
-
-#include <QAndroidJniObject>
-#include <QAndroidJniEnvironment>
-#include <QtAndroid>
 
 QString AndroidFilePicker::getOpenFileName(QWidget * parent, const QString & title,
 	const QString & internalDir, const QString & filter, Mode mode)
@@ -66,7 +61,7 @@ QString AndroidFilePicker::getSaveFileName(QWidget * parent, const QString & tit
 		const int starDot = filter.indexOf("*.");
 		if(starDot >= 0)
 		{
-			int end = filter.indexOf(QRegExp("[^a-zA-Z0-9]"), starDot + 2);
+			int end = filter.indexOf(QRegularExpression(QLatin1String{"[^a-zA-Z0-9]"}), starDot + 2);
 			ext = filter.mid(starDot + 2, end < 0 ? -1 : end - (starDot + 2)).toLower();
 		}
 
@@ -133,30 +128,32 @@ QString AndroidFilePicker::getSaveFileName(QWidget * parent, const QString & tit
 
 void AndroidFilePicker::writeFileToUri(const QString & localPath, const QString & contentUri)
 {
-	QAndroidJniObject activity = QtAndroid::androidActivity();
+	QJNI_OBJECT_CLASS activity = QT_ACTIVITY;
 	if(!activity.isValid())
 		return;
 
-	QAndroidJniObject jLocalPath = QAndroidJniObject::fromString(localPath);
-	QAndroidJniObject jUri = QAndroidJniObject::fromString(contentUri);
+	QJNI_OBJECT_CLASS jLocalPath = QJNI_OBJECT_CLASS::fromString(localPath);
+	QJNI_OBJECT_CLASS jUri = QJNI_OBJECT_CLASS::fromString(contentUri);
 
-	activity.callMethod<void>("writeFileToUri",
+	JNI_CALL_METHOD(activity, void, "writeFileToUri",
 		"(Ljava/lang/String;Ljava/lang/String;)V",
 		jLocalPath.object<jstring>(), jUri.object<jstring>());
 
-	QAndroidJniEnvironment env;
-	if(env->ExceptionCheck())
-		env->ExceptionClear();
+	android::withJniEnv([](JNIEnv * jniEnv)
+	{
+		if(jniEnv->ExceptionCheck())
+			jniEnv->ExceptionClear();
+	});
 }
 
 QString AndroidFilePicker::nativeOpenFile(const QString & mimeType)
 {
-	QAndroidJniObject activity = QtAndroid::androidActivity();
+	QJNI_OBJECT_CLASS activity = QT_ACTIVITY;
 	if(!activity.isValid())
 		return {};
 
-	QAndroidJniObject jMimeType = QAndroidJniObject::fromString(mimeType);
-	QAndroidJniObject result = activity.callObjectMethod("pickFileForOpen",
+	QJNI_OBJECT_CLASS jMimeType = QJNI_OBJECT_CLASS::fromString(mimeType);
+	QJNI_OBJECT_CLASS result = activity.callObjectMethod("pickFileForOpen",
 		"(Ljava/lang/String;)Ljava/lang/String;",
 		jMimeType.object<jstring>());
 
@@ -169,13 +166,13 @@ QString AndroidFilePicker::nativeOpenFile(const QString & mimeType)
 
 QString AndroidFilePicker::nativeSaveFile(const QString & mimeType, const QString & suggestedName)
 {
-	QAndroidJniObject activity = QtAndroid::androidActivity();
+	QJNI_OBJECT_CLASS activity = QT_ACTIVITY;
 	if(!activity.isValid())
 		return {};
 
-	QAndroidJniObject jMimeType = QAndroidJniObject::fromString(mimeType);
-	QAndroidJniObject jName = QAndroidJniObject::fromString(suggestedName);
-	QAndroidJniObject result = activity.callObjectMethod("pickFileForSave",
+	QJNI_OBJECT_CLASS jMimeType = QJNI_OBJECT_CLASS::fromString(mimeType);
+	QJNI_OBJECT_CLASS jName = QJNI_OBJECT_CLASS::fromString(suggestedName);
+	QJNI_OBJECT_CLASS result = activity.callObjectMethod("pickFileForSave",
 		"(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;",
 		jMimeType.object<jstring>(), jName.object<jstring>());
 
@@ -185,5 +182,3 @@ QString AndroidFilePicker::nativeSaveFile(const QString & mimeType, const QStrin
 	QString uri = result.toString();
 	return uri.isEmpty() ? QString() : uri;
 }
-
-#endif // VCMI_ANDROID

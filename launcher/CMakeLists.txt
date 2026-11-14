@@ -36,15 +36,15 @@ set(launcher_SRCS
 if(IOS)
 	list(APPEND launcher_SRCS
 		ios/launchGame.m
-		ios/revealdirectoryinfiles.h
 		ios/revealdirectoryinfiles.mm
-		ios/selectdirectory.h
 		ios/selectdirectory.mm
 		prepare_ios.mm
 	)
 elseif(ANDROID)
 	list(APPEND launcher_SRCS
+		android/androidutils.cpp
 		prepare_android.cpp
+		#../mapeditor/editorbridge.cpp # Qt 6
 	)
 endif()
 
@@ -77,6 +77,17 @@ set(launcher_HEADERS
 		prepare.h
 		prepare_p.h
 )
+if(IOS)
+	list(APPEND launcher_HEADERS
+		ios/revealdirectoryinfiles.h
+		ios/selectdirectory.h
+	)
+elseif(ANDROID)
+	list(APPEND launcher_HEADERS
+		android/androidutils.h
+		android/qtcompat.h
+	)
+endif()
 
 # gamepad support relies on SDL, which is not linked into launcher on mobile platforms
 if(NOT ANDROID AND NOT IOS)
@@ -172,7 +183,9 @@ endif()
 # to always look for includes there:
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-if(ENABLE_SINGLE_APP_BUILD OR ANDROID)
+if(QT_VERSION_MAJOR GREATER_EQUAL 6)
+	qt_add_executable(vcmilauncher WIN32 ${launcher_QM} ${launcher_ICON})
+elseif(ENABLE_SINGLE_APP_BUILD OR ANDROID)
 	add_library(vcmilauncher OBJECT ${launcher_QM})
 else()
 	add_executable(vcmilauncher WIN32 ${launcher_QM} ${launcher_ICON})
@@ -196,6 +209,10 @@ if(ENABLE_TRANSLATIONS)
 endif()
 
 if(ANDROID)
+	# Qt 6 requirement
+    get_target_property(targetBinaryDir vcmilauncher BINARY_DIR)
+	set(androidQtBuildDir "${targetBinaryDir}/android-build" PARENT_SCOPE)
+
 	get_target_property(rccPath Qt${QT_VERSION_MAJOR}::rcc IMPORTED_LOCATION)
  
 	function(generate_binary_resource resourceName resourceDir)
@@ -237,14 +254,14 @@ if(WIN32)
 			OUTPUT_NAME "VCMI_launcher"
 			PROJECT_LABEL "VCMI_launcher"
 	)
-
-	# FIXME: Can't to get CMP0020 working with Vcpkg and CMake 3.8.2
-	# So far I tried:
-	# - cmake_minimum_required set to 2.8.11 globally and in this file
-	# - cmake_policy in all possible places
-	# - used NO_POLICY_SCOPE to make sure no other parts reset policies
-	# Still nothing worked, warning kept appearing and WinMain didn't link automatically
-	target_link_libraries(vcmilauncher Qt${QT_VERSION_MAJOR}::WinMain)
+elseif(ANDROID)
+	#QT_ANDROID_EXTRA_LIBS ?
+	#QT_ANDROID_LEGACY_PACKAGING ?
+	set_target_properties(vcmilauncher
+		PROPERTIES
+			QT_ANDROID_PACKAGE_SOURCE_DIR ${ANDROID_PACKAGE_SOURCE_DIR}
+			QT_ANDROID_TARGET_SDK_VERSION ${ANDROID_TARGET_SDK_VERSION}
+	)
 endif()
 
 if(APPLE)
@@ -253,7 +270,11 @@ if(APPLE)
 endif()
 
 if(ANDROID)
-	target_link_libraries(vcmilauncher Qt${QT_VERSION_MAJOR}::AndroidExtras)
+	if(QT_VERSION_MAJOR GREATER_EQUAL 6)
+		target_link_libraries(vcmilauncher PRIVATE Qt${QT_VERSION_MAJOR}::CorePrivate)
+	else()
+		target_link_libraries(vcmilauncher PRIVATE Qt5::AndroidExtras)
+	endif()
 endif()
 
 # the launcher queries SDL for displays and rendering drivers. the lookup is repeated
@@ -261,18 +282,18 @@ endif()
 # on mobile the launcher shares its process with the client, so it needs the headers too.
 if(ENABLE_SDL3)
 	find_package(SDL3 REQUIRED)
-	target_link_libraries(vcmilauncher ${SDL3_CORE_TARGET})
+	target_link_libraries(vcmilauncher PRIVATE ${SDL3_CORE_TARGET})
 	target_compile_definitions(vcmilauncher PRIVATE VCMI_SDL3)
 elseif(NOT ANDROID AND NOT IOS)
 	find_package(SDL2 REQUIRED)
-	target_link_libraries(vcmilauncher SDL2::SDL2)
+	target_link_libraries(vcmilauncher PRIVATE SDL2::SDL2)
 endif()
 
 if(ENABLE_STATIC_LIBS OR NOT (ENABLE_EDITOR AND ENABLE_LAUNCHER))
 	target_compile_definitions(vcmilauncher PRIVATE VCMIQT_STATIC)
 endif()
 
-target_link_libraries(vcmilauncher vcmi vcmiqt Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(vcmilauncher PRIVATE vcmi vcmiqt Qt${QT_VERSION_MAJOR}::Widgets)
 target_include_directories(vcmilauncher
 	PUBLIC	${CMAKE_CURRENT_SOURCE_DIR}
 )
@@ -285,15 +306,19 @@ enable_pch(vcmilauncher)
 
 if(ENABLE_INNOEXTRACT)
 	target_compile_definitions(vcmilauncher PRIVATE ENABLE_INNOEXTRACT)
-	target_link_libraries(vcmilauncher innoextract)
+	target_link_libraries(vcmilauncher PRIVATE innoextract)
 endif()
 
 if(ENABLE_DISCORD)
 	target_compile_definitions(vcmilauncher PRIVATE ENABLE_DISCORD)
 endif()
 
+if(ENABLE_SINGLE_APP_BUILD AND ENABLE_EDITOR)
+	target_link_libraries(vcmilauncher PRIVATE vcmieditor)
+endif()
+
 if(IOS)
-	target_link_libraries(vcmilauncher
+	target_link_libraries(vcmilauncher PRIVATE
 		iOS_utils
 		"-framework UniformTypeIdentifiers"
 	)
@@ -303,7 +328,7 @@ if(IOS)
 		file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/QIOSIntegrationPlugin.h
 			"#include <QtPlugin>\nQ_IMPORT_PLUGIN(QIOSIntegrationPlugin)"
 		)
-		target_link_libraries(vcmilauncher
+		target_link_libraries(vcmilauncher PRIVATE
 			Qt${QT_VERSION_MAJOR}::QIOSIntegrationPlugin
 			qt::QIOSIntegrationPlugin
 		)

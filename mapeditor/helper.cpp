@@ -107,6 +107,29 @@ void Helper::decorateDialog(QDialog * dialog)
 #endif
 }
 
+bool Helper::getAnswerAboutUnsavedChanges(QWidget * widget, bool unsaved)
+{
+	if(!unsaved)
+		return true;
+
+	const auto sure = QMessageBox::question(widget,
+		QObject::tr("Confirmation"), QObject::tr("Unsaved changes will be lost, are you sure?"));
+	return sure != QMessageBox::No;
+}
+
+// void Helper::closeEditor(QWidget * editor)
+// {
+// #ifdef VCMI_ANDROID
+// 	// On Android the Qt event loop may not quit automatically when the last
+// 	// window closes. Quit the app and finish the Activity to avoid a black screen.
+// 	qApp->quit();
+// 	androidFinishActivity();
+// #else
+// 	if(auto parent = editor->parentWidget(); parent != nullptr)
+// 		parent->show();
+// #endif
+// }
+
 ResourcePath addFilesystemAndGetResource(const QString & filenameSelect, EResType type, const std::string & typeName)
 {
 	QFileInfo fi(filenameSelect);

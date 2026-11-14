@@ -49,13 +49,17 @@ else()
 	target_link_libraries(vcmiclient PRIVATE SDL2::SDL2)
 endif()
 
-if(ENABLE_SINGLE_APP_BUILD AND ENABLE_LAUNCHER)
+# CMake Error at clientapp/CMakeLists.txt:39 (target_link_libraries):
+#   Target "vcmilauncher" of type MODULE_LIBRARY may not be linked into another
+#   target.  One may link only to INTERFACE, OBJECT, STATIC or SHARED
+#   libraries, or to executables with the ENABLE_EXPORTS property set.
+if(NOT (QT_VERSION_MAJOR GREATER_EQUAL 6 AND ANDROID) AND ENABLE_SINGLE_APP_BUILD AND ENABLE_LAUNCHER)
 	target_link_libraries(vcmiclient PRIVATE vcmilauncher)
 endif()
 
-if(ENABLE_SINGLE_APP_BUILD AND ENABLE_EDITOR)
-	target_link_libraries(vcmiclient PRIVATE vcmieditor)
-endif()
+# if(ENABLE_SINGLE_APP_BUILD AND ENABLE_EDITOR)
+# 	target_link_libraries(vcmiclient PRIVATE vcmieditor)
+# endif()
 
 target_include_directories(vcmiclient
 	PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
@@ -126,7 +130,11 @@ elseif(ANDROID)
 	)
 	add_dependencies(android_deploy vcmiclient)
 
-	foreach(androidTarget apk aab)
+	set(androidTargets apk aab)
+	if(QT_VERSION_MAJOR GREATER_EQUAL 6)
+		list(APPEND androidTargets aar)
+	endif()
+	foreach(androidTarget ${androidTargets})
 		set(wrapperTarget "build_${androidTarget}")	
 		add_custom_target(${wrapperTarget}
 			${CMAKE_COMMAND} -D "QT_ANDROID_TARGET=${androidTarget}" -P "${CMAKE_SOURCE_DIR}/cmake_modules/android_target_wrapper.cmake"

@@ -42,9 +42,14 @@ private:
 namespace Helper
 {
 	void decorateDialog(QDialog * dialog);
+
+	bool getAnswerAboutUnsavedChanges(QWidget * widget, bool unsaved);
+	// void showParentEditor(QWidget * editor);
+
 	std::unique_ptr<CMap> openMapInternal(const QString &, IGameInfoCallback *);
 	std::shared_ptr<Campaign> openCampaignInternal(const QString &);
 	std::map<std::string, std::shared_ptr<CRmgTemplate>> openTemplateInternal(const QString &);
+
 	void saveCampaign(std::shared_ptr<Campaign> campaign, const QString & filename);
 	void saveTemplate(std::map<std::string, std::shared_ptr<CRmgTemplate>> tpl, const QString & filename);
 }

@@ -13,8 +13,6 @@
 
 class QWidget;
 
-#ifdef VCMI_ANDROID
-
 /// Helper for Android-specific file dialogs in the map editor.
 /// Provides a choice between internal (Maps folder) and external (SAF) file picking.
 class AndroidFilePicker
@@ -53,5 +51,3 @@ private:
 	/// Opens the Android native file picker for saving via JNI.
 	static QString nativeSaveFile(const QString & mimeType, const QString & suggestedName);
 };
-
-#endif // VCMI_ANDROID

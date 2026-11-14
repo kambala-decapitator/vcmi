@@ -27,10 +27,7 @@
 int argcForClient;
 char ** argvForClient;
 #elif defined(VCMI_ANDROID)
-# include <QAndroidJniEnvironment>
-# include <QAndroidJniObject>
-# include <QtAndroid>
-# include "../lib/CAndroidVMHelper.h"
+# include "android/androidutils.h"
 # ifdef ENABLE_EDITOR
 #  include "../mapeditor/editorbridge.h"
 # endif
@@ -58,10 +55,7 @@ int MAIN_EXPORT main(int argc, char * argv[])
 #ifdef VCMI_ANDROID
 	// Initialize JNI classloader before QApplication - Qt's platform plugin
 	// may trigger VCMIDirs::get() which needs CAndroidVMHelper
-	{
-		QAndroidJniEnvironment jniEnv;
-		CAndroidVMHelper::initClassloader(static_cast<JNIEnv *>(jniEnv));
-	}
+	android::initClassloader();
 #endif
 	QApplication app(argc, argv);
 
@@ -90,9 +84,8 @@ int MAIN_EXPORT main(int argc, char * argv[])
 	MainWindow mainWindow;
 	mainWindow.show();
 
-#ifdef VCMI_ANDROID
+#if defined(VCMI_ANDROID) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	// changing language causes window to increase size over the bounds, force it back to proper value
-	// TODO: check in Qt 6 if the hack is still needed
 	auto appWindow = app.focusWindow();
 	auto resizeWindowToScreen = [appWindow]{
 		appWindow->resize(appWindow->screen()->availableSize());
@@ -128,7 +121,7 @@ void startGame(const QStringList & args)
 	}
 	qApp->quit();
 #elif defined(VCMI_ANDROID)
-	QtAndroid::androidActivity().callMethod<void>("onLaunchGameBtnPressed");
+	QT_ACTIVITY.callMethod<void>("onLaunchGameBtnPressed");
 #else
 	startExecutable(pathToQString(VCMIDirs::get().clientPath()), args);
 #endif
@@ -138,7 +131,7 @@ void startEditor(const QStringList & args, QWidget * parent)
 {
 #ifdef ENABLE_EDITOR
 # ifdef VCMI_ANDROID
-	QtAndroid::androidActivity().callMethod<void>("openMapEditor");
+	QT_ACTIVITY.callMethod<void>("openMapEditor");
 # elif defined(VCMI_IOS)
 	openMapEditor(parent);
 # else

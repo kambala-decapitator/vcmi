@@ -36,7 +36,7 @@ import org.libsdl.app.SDL;
 /**
  * @author F
  */
-public class ActivityLauncher extends org.qtproject.qt5.android.bindings.QtActivity
+public class ActivityLauncher extends org.qtproject.qt.android.bindings.QtActivity
 {
     private static final int PICK_EXTERNAL_VCMI_DATA_TO_COPY = 1;
     // qt requests permissions through this activity as well and counts its codes up from 0

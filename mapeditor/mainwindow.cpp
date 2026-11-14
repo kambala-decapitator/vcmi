@@ -69,12 +69,11 @@
 #include "editorfiledialog.h"
 
 #ifdef VCMI_ANDROID
-#include <QAndroidJniObject>
-#include <QtAndroid>
-#include <QWindow>
-#endif
+#include "../launcher/android/androidutils.h"
 
-#ifdef VCMI_ANDROID
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QWindow>
+
 // Qt 5 bug on Android: androidjniinput.cpp computes the local position of mouse
 // and tablet events as globalPos(native px) - tlw->position()(logical px), mixing
 // coordinate spaces. After QHighDpiScaling the local position is off by
@@ -129,10 +128,11 @@ public:
 		}
 	}
 };
+#endif
 
 static void androidFinishActivity()
 {
-	QAndroidJniObject activity = QtAndroid::androidActivity();
+	auto activity = QT_ACTIVITY;
 	if(activity.isValid())
 	{
 		activity.callMethod<void>("finishAffinity");
@@ -365,7 +365,7 @@ EditorMainWindow::EditorMainWindow(QWidget* parent) :
 	menuBar()->setNativeMenuBar(false);
 #endif
 
-#ifdef VCMI_ANDROID
+#if defined(VCMI_ANDROID) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	qApp->installEventFilter(new AndroidInputOffsetFix(this));
 #endif
 
@@ -532,15 +532,7 @@ EditorMainWindow::~EditorMainWindow()
 
 bool EditorMainWindow::getAnswerAboutUnsavedChanges()
 {
-	if(unsaved)
-	{
-		auto sure = QMessageBox::question(this, tr("Confirmation"), tr("Unsaved changes will be lost, are you sure?"));
-		if(sure == QMessageBox::No)
-		{
-			return false;
-		}
-	}
-	return true;
+	return Helper::getAnswerAboutUnsavedChanges(this, unsaved);
 }
 
 void EditorMainWindow::closeEvent(QCloseEvent *event)

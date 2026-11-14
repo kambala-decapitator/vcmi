@@ -23,11 +23,6 @@
 #include "../helper.h"
 #include "../editorfiledialog.h"
 
-#ifdef VCMI_ANDROID
-#include <QAndroidJniObject>
-#include <QtAndroid>
-#endif
-
 #include "../../lib/VCMIDirs.h"
 #include "../../lib/rmg/CRmgTemplate.h"
 #include "../../lib/texts/MetaString.h"
@@ -646,15 +641,7 @@ void TemplateEditor::saveContent()
 
 bool TemplateEditor::getAnswerAboutUnsavedChanges()
 {
-	if(unsaved)
-	{
-		auto sure = QMessageBox::question(this, tr("Confirmation"), tr("Unsaved changes will be lost, are you sure?"));
-		if(sure == QMessageBox::No)
-		{
-			return false;
-		}
-	}
-	return true;
+	return Helper::getAnswerAboutUnsavedChanges(this, unsaved);
 }
 
 void TemplateEditor::setTitle()
@@ -935,7 +922,7 @@ void TemplateEditor::closeEvent(QCloseEvent *event)
 	if(getAnswerAboutUnsavedChanges())
 	{
 		QWidget::closeEvent(event);
-#ifdef VCMI_ANDROID
+#if 0//def VCMI_ANDROID
 		QApplication::quit();
 		QAndroidJniObject activity = QtAndroid::androidActivity();
 		if(activity.isValid())

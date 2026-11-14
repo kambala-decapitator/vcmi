@@ -16,10 +16,22 @@ if(APPLE AND NOT IOS)
 	set(MACOS 1)
 endif()
 
+if(POLICY CMP0102)
+	cmake_policy(SET CMP0102 NEW)
+endif()
+
+if(POLICY CMP0112)
+	cmake_policy(SET CMP0112 NEW)
+endif()
+
 # Use Visual Studio's latest debugger information format settings.
 if(POLICY CMP0142)
 	cmake_policy(SET CMP0142 NEW)
 endif()
+
+# if(POLICY CMP0156)
+# 	cmake_policy(SET CMP0156 NEW)
+# endif()
 
 # Use the new FindBoost behavior and prefer Boost's own CMake package.
 if(POLICY CMP0167)
@@ -30,6 +42,18 @@ endif()
 if(POLICY CMP0177)
 	cmake_policy(SET CMP0177 NEW)
 endif()
+
+# if(POLICY CMP0181)
+# 	cmake_policy(SET CMP0181 NEW)
+# endif()
+
+# if(POLICY CMP0199)
+# 	cmake_policy(SET CMP0199 NEW)
+# endif()
+
+# if(POLICY CMP0200)
+# 	cmake_policy(SET CMP0200 NEW)
+# endif()
 
 # file(CREATE_LINK) with COPY_ON_ERROR copies directory content.
 if(POLICY CMP0205)
@@ -79,7 +103,7 @@ option(ENABLE_CCACHE "Speed up recompilation by caching previous compilations" O
 
 if(ANDROID)
 	set(ANDROID_SDK "$ENV{ANDROID_HOME}" CACHE STRING "Path to Android SDK")
-	set(ANDROID_TARGET_SDK_VERSION "35" CACHE STRING "Android target SDK version") # used only in command line builds
+	set(ANDROID_TARGET_SDK_VERSION "36" CACHE STRING "Android target SDK version")
 	set(ANDROID_GRADLE_PROPERTIES "" CACHE STRING "Additional Gradle properties separated by semi-colon")
 
 	set(ENABLE_STATIC_LIBS ON)
@@ -446,12 +470,6 @@ endif()
 if(IOS)
 	set(CMAKE_MACOSX_RPATH 1)
 
-	if(NOT USING_CONAN)
-		list(APPEND CMAKE_FIND_ROOT_PATH "${CMAKE_PREFIX_PATH}") # required for Boost
-		set(CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH FALSE)
-		set(CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH FALSE)
-	endif()
-
 	set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED NO)
 	set(CMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED_FOR_APPS YES)
 	set(CMAKE_XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "${BUNDLE_IDENTIFIER_PREFIX}.$(PRODUCT_NAME)")
@@ -584,6 +602,11 @@ endif()
 #        Finding packages                  #
 ############################################
 
+if(IOS OR ANDROID)
+	set(CMAKE_FIND_USE_CMAKE_SYSTEM_PATH OFF)
+	set(CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH OFF)
+endif()
+
 set(BOOST_COMPONENTS filesystem program_options)
 if(ENABLE_INNOEXTRACT)
 	list(APPEND BOOST_COMPONENTS iostreams)
@@ -693,6 +716,8 @@ if(WIN32 AND USING_CONAN AND EXISTS "${CONAN_RUNTIME_LIBS_FILE}")
 endif()
 
 if(ENABLE_LAUNCHER OR ENABLE_EDITOR)
+	# TODO
+	set(QT_ANDROID_CREATE_SYMLINKS_ONLY ON)
 	if(ANDROID)
 		# required by Qt, see Qt5AndroidSupport.cmake
 		set(QT_ANDROID_APPLICATION_BINARY vcmiclient)
@@ -720,9 +745,13 @@ if(ENABLE_LAUNCHER OR ENABLE_EDITOR)
 	endif()
 	if(ENABLE_TEMPLATE_EDITOR)
 		list(APPEND qtComponents Svg Xml)
-		if(QT_VERSION_MAJOR EQUAL 6)
+		if(QT_VERSION_MAJOR GREATER_EQUAL 6)
 			list(APPEND qtComponents SvgWidgets)
 		endif()
+	endif()
+	if(ANDROID AND QT_VERSION_MAJOR GREATER_EQUAL 6)
+		list(APPEND qtComponents CorePrivate)
+		set(QT_NO_PRIVATE_MODULE_WARNING ON)
 	endif()
 	find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS ${qtComponents})
 
@@ -730,6 +759,11 @@ if(ENABLE_LAUNCHER OR ENABLE_EDITOR)
 		# Conan doesn't include this file by default, https://github.com/conan-io/conan-center-index/pull/31171
 		# TODO: check in Qt 6
 		include("${QT_PACKAGE_DIR}/lib/cmake/Qt${QT_VERSION_MAJOR}Core/Qt${QT_VERSION_MAJOR}AndroidSupport.cmake")
+	endif()
+
+	# Target properties that specify Android-specific paths may contain generator expressions
+	if(QT_KNOWN_POLICY_QTP0002)
+		qt_policy(SET QTP0002 NEW)
 	endif()
 endif()
 
@@ -792,8 +826,9 @@ elseif(ANDROID)
 	string(JSON ANDROID_SYSROOT_LIB_SUBDIR GET "${ndkAbiInfo}" "${ANDROID_ABI}" "triple")
 
 	# required by Qt
-	set(androidQtBuildDir "${CMAKE_BINARY_DIR}/android-build")
-	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${androidQtBuildDir}/${LIB_DIR}")
+	# TODO: CMAKE_LIBRARY_OUTPUT_DIRECTORY only for Qt 5?
+	# set(androidQtBuildDir "${CMAKE_BINARY_DIR}/android-build")
+	# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${androidQtBuildDir}/${LIB_DIR}")
 else()
 	# includes lib path which determines where to install shared libraries (either /lib or /lib64)
 	include(GNUInstallDirs)
@@ -859,12 +894,12 @@ if(ENABLE_LAUNCHER OR ENABLE_EDITOR)
 	add_subdirectory(vcmiqt)
 endif()
 
-if(ENABLE_LAUNCHER)
-	add_subdirectory(launcher)
-endif()
-
 if(ENABLE_EDITOR)
 	add_subdirectory(mapeditor)
+endif()
+
+if(ENABLE_LAUNCHER)
+	add_subdirectory(launcher)
 endif()
 
 if(ENABLE_LOBBY)
@@ -889,6 +924,14 @@ if(ENABLE_TEST)
 	enable_testing()
 	add_subdirectory(test)
 endif()
+
+# if(ANDROID)
+# 	add_custom_target(buildApk
+# 		${CMAKE_COMMAND} -E env "ORG_GRADLE_PROJECT_SDL_JAVA_SRC_DIR=${SDL_JAVA_SRC_DIR}" --
+# 			${CMAKE_COMMAND} --build . --target apk
+# 		VERBATIM USES_TERMINAL
+# 	)
+# endif()
 
 #######################################
 #        Installation section         #

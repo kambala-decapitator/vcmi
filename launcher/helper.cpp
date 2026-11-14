@@ -21,13 +21,11 @@
 #include <QFileDialog>
 
 #ifdef VCMI_ANDROID
-#include <QAndroidJniObject>
-#include <QtAndroid>
-#include <QAndroidJniEnvironment>
+#include "android/androidutils.h"
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QAndroidActivityResultReceiver>
 #endif
-
-#ifdef VCMI_IOS
+#elif defined(VCMI_IOS)
 #include "ios/revealdirectoryinfiles.h"
 #include "ios/selectdirectory.h"
 #include "iOS_utils.h"
@@ -94,8 +92,8 @@ QString getRealPath(QString path)
 #ifdef VCMI_ANDROID
 	if(path.contains("content://", Qt::CaseInsensitive))
 	{
-		auto str = QAndroidJniObject::fromString(safeEncode(path));
-		return QAndroidJniObject::callStaticObjectMethod("eu/vcmi/vcmi/util/FileUtil", "getFilenameFromUri", "(Ljava/lang/String;Landroid/content/Context;)Ljava/lang/String;", str.object<jstring>(), QtAndroid::androidContext().object()).toString();
+		auto str = QJNI_OBJECT_CLASS::fromString(safeEncode(path));
+		return QJNI_OBJECT_CLASS::callStaticObjectMethod("eu/vcmi/vcmi/util/FileUtil", "getFilenameFromUri", "(Ljava/lang/String;Landroid/content/Context;)Ljava/lang/String;", str.object<jstring>(), QT_ACTIVITY.object()).toString();
 	}
 	return path;
 #else
@@ -111,9 +109,9 @@ bool performNativeCopy(QString src, QString dst)
 
 	if(srcIsContent && !dstIsContent)
 	{
-		const QAndroidJniObject jSrc = QAndroidJniObject::fromString(safeEncode(src));
-		const QAndroidJniObject jDst = QAndroidJniObject::fromString(dst);
-		QAndroidJniObject::callStaticMethod<void>("eu/vcmi/vcmi/util/FileUtil", "copyFileFromUri", "(Ljava/lang/String;Ljava/lang/String;Landroid/content/Context;)V",	jSrc.object<jstring>(),	jDst.object<jstring>(),	QtAndroid::androidContext().object());
+		const QJNI_OBJECT_CLASS jSrc = QJNI_OBJECT_CLASS::fromString(safeEncode(src));
+		const QJNI_OBJECT_CLASS jDst = QJNI_OBJECT_CLASS::fromString(dst);
+		QJNI_OBJECT_CLASS::callStaticMethod<void>("eu/vcmi/vcmi/util/FileUtil", "copyFileFromUri", "(Ljava/lang/String;Ljava/lang/String;Landroid/content/Context;)V",	jSrc.object<jstring>(),	jDst.object<jstring>(),	QT_ACTIVITY.object());
 		// Real filesystem path -> QFileInfo works
 		return QFileInfo(dst).exists() && QFileInfo(dst).size() > 0;
 	}
@@ -121,9 +119,9 @@ bool performNativeCopy(QString src, QString dst)
 	// filesystem path -> content://  (NEW Java method that writes via ContentResolver)
 	if(!srcIsContent && dstIsContent)
 	{
-		const QAndroidJniObject jSrc = QAndroidJniObject::fromString(src);
-		const QAndroidJniObject jDst = QAndroidJniObject::fromString(safeEncode(dst));
-		const jboolean ok = QAndroidJniObject::callStaticMethod<jboolean>("eu/vcmi/vcmi/util/FileUtil", "copyFilePathToUri", "(Ljava/lang/String;Ljava/lang/String;Landroid/content/Context;)Z", jSrc.object<jstring>(), jDst.object<jstring>(),	QtAndroid::androidContext().object());
+		const QJNI_OBJECT_CLASS jSrc = QJNI_OBJECT_CLASS::fromString(src);
+		const QJNI_OBJECT_CLASS jDst = QJNI_OBJECT_CLASS::fromString(safeEncode(dst));
+		const jboolean ok = QJNI_OBJECT_CLASS::callStaticMethod<jboolean>("eu/vcmi/vcmi/util/FileUtil", "copyFilePathToUri", "(Ljava/lang/String;Ljava/lang/String;Landroid/content/Context;)Z", jSrc.object<jstring>(), jDst.object<jstring>(), QT_ACTIVITY.object());
 		return ok;
 	}
 #endif
@@ -139,18 +137,18 @@ QString createFile(QString target, QString fileName, QString mime)
 #ifdef VCMI_ANDROID
 	if(target.startsWith("content://", Qt::CaseInsensitive))
 	{
-		const QAndroidJniObject jTree = QAndroidJniObject::fromString(target);
-		const QAndroidJniObject jName = QAndroidJniObject::fromString(fileName);
+		const QJNI_OBJECT_CLASS jTree = QJNI_OBJECT_CLASS::fromString(target);
+		const QJNI_OBJECT_CLASS jName = QJNI_OBJECT_CLASS::fromString(fileName);
 		const QString targetMime = mime.isEmpty() ? QStringLiteral("application/octet-stream") : mime;
-		const QAndroidJniObject jMime = QAndroidJniObject::fromString(targetMime);
-		const QAndroidJniObject jDst = QAndroidJniObject::callStaticObjectMethod(
+		const QJNI_OBJECT_CLASS jMime = QJNI_OBJECT_CLASS::fromString(targetMime);
+		const QJNI_OBJECT_CLASS jDst = QJNI_OBJECT_CLASS::callStaticObjectMethod(
 			"eu/vcmi/vcmi/util/FileUtil",
 			"createFileInTree",
 			"(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Landroid/content/Context;)Ljava/lang/String;",
 			jTree.object<jstring>(),
 			jName.object<jstring>(),
 			jMime.object<jstring>(),
-			QtAndroid::androidContext().object());
+			QT_ACTIVITY.object());
 
 		return jDst.isValid() ? jDst.toString() : QString();
 	}
@@ -180,9 +178,9 @@ MainWindow * getMainWindow()
 void keepScreenOn(bool isEnabled)
 {
 #if defined(VCMI_ANDROID)
-	QtAndroid::runOnAndroidThread([isEnabled]
+	RUN_ON_ANDROID_MAIN_THREAD([isEnabled]
 	{
-		QtAndroid::androidActivity().callMethod<void>("keepScreenOn", "(Z)V", isEnabled);
+		JNI_CALL_METHOD(QT_ACTIVITY, void, "keepScreenOn", "(Z)V", isEnabled);
 	});
 #elif defined(VCMI_IOS)
 	iOS_utils::keepScreenOn(isEnabled);
@@ -192,9 +190,9 @@ void keepScreenOn(bool isEnabled)
 void allowGamepadStart(bool isEnabled)
 {
 #if defined(VCMI_ANDROID)
-	QtAndroid::runOnAndroidThread([isEnabled]
+	RUN_ON_ANDROID_MAIN_THREAD([isEnabled]
 	{
-		QtAndroid::androidActivity().callMethod<void>("setGamepadStartEnabled", "(Z)V", isEnabled);
+		JNI_CALL_METHOD(QT_ACTIVITY, void, "setGamepadStartEnabled", "(Z)V", isEnabled);
 	});
 #endif
 }
@@ -205,13 +203,13 @@ bool canUseFolderPicker()
 	// Folder picker is available on API >= 21.
 	// Android/Google TV usually lacks DocumentsUI — hide this option.
 
-	QAndroidJniObject context = QtAndroid::androidContext();
-	QAndroidJniObject uiModeMgr = context.callObjectMethod("getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;", QAndroidJniObject::fromString("uimode").object<jstring>());
+	QJNI_OBJECT_CLASS context = QT_ACTIVITY;
+	QJNI_OBJECT_CLASS uiModeMgr = context.callObjectMethod("getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;", QJNI_OBJECT_CLASS::fromString("uimode").object<jstring>());
 
 	if(uiModeMgr.isValid())
 	{
-		jint mode = uiModeMgr.callMethod<jint>("getCurrentModeType", "()I");
-		jint TV = QAndroidJniObject::getStaticField<jint>("android/content/res/Configuration", "UI_MODE_TYPE_TELEVISION");
+		jint mode = JNI_CALL_METHOD(uiModeMgr, jint, "getCurrentModeType", "()I");
+		jint TV = QJNI_OBJECT_CLASS::getStaticField<jint>("android/content/res/Configuration", "UI_MODE_TYPE_TELEVISION");
 		if(mode == TV)
 			return false;
 	}
@@ -232,10 +230,10 @@ static constexpr int  kFolderPickerReqCode = 4242;
 
 static jint intentFlags()
 {
-	const jint fRead	= QAndroidJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_READ_URI_PERMISSION");
-	const jint fWrite   = QAndroidJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_WRITE_URI_PERMISSION");
-	const jint fPersist = QAndroidJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_PERSISTABLE_URI_PERMISSION");
-	const jint fPrefix  = QAndroidJniObject::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_PREFIX_URI_PERMISSION");
+	const jint fRead	= QJNI_OBJECT_CLASS::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_READ_URI_PERMISSION");
+	const jint fWrite   = QJNI_OBJECT_CLASS::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_WRITE_URI_PERMISSION");
+	const jint fPersist = QJNI_OBJECT_CLASS::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_PERSISTABLE_URI_PERMISSION");
+	const jint fPrefix  = QJNI_OBJECT_CLASS::getStaticField<jint>("android/content/Intent", "FLAG_GRANT_PREFIX_URI_PERMISSION");
 
 	return fRead | fWrite | fPersist | fPrefix;
 }
@@ -246,7 +244,7 @@ public:
 	std::function<void(QString)> onDone;
 
 	// One-shot result handler for ACTION_OPEN_DOCUMENT_TREE
-	void handleActivityResult(int req, int res, const QAndroidJniObject &data) override
+	void handleActivityResult(int req, int res, const QJNI_OBJECT_CLASS &data) override
 	{
 		auto cb = std::exchange(onDone, {}); // guarantee single-use
 		if(!cb)
@@ -259,14 +257,14 @@ public:
 		}
 
 		// Always return content:// tree URI
-		const QAndroidJniObject uri = data.callObjectMethod("getData","()Landroid/net/Uri;");
-		const QAndroidJniObject us  = uri.callObjectMethod("toString","()Ljava/lang/String;");
+		const QJNI_OBJECT_CLASS uri = data.callObjectMethod("getData","()Landroid/net/Uri;");
+		const QJNI_OBJECT_CLASS us  = uri.callObjectMethod("toString","()Ljava/lang/String;");
 		const QString pickedTree	= us.toString();
 
 		// Persist read+write permission
-		const QAndroidJniObject ctx = QtAndroid::androidContext();
-		const QAndroidJniObject cr  = ctx.callObjectMethod("getContentResolver","()Landroid/content/ContentResolver;");
-		cr.callMethod<void>("takePersistableUriPermission", "(Landroid/net/Uri;I)V", uri.object<jobject>(), jint(1 | 2));
+		const QJNI_OBJECT_CLASS ctx = QT_ACTIVITY;
+		const QJNI_OBJECT_CLASS cr  = ctx.callObjectMethod("getContentResolver","()Landroid/content/ContentResolver;");
+		JNI_CALL_METHOD(cr, void, "takePersistableUriPermission", "(Landroid/net/Uri;I)V", uri.object<jobject>(), jint(1 | 2));
 
 		// Bounce back to Qt thread
 		QMetaObject::invokeMethod(qApp, [cb, pickedTree]{ if (cb) cb(pickedTree); }, Qt::QueuedConnection);
@@ -286,11 +284,11 @@ void nativeFolderPicker(QWidget *parent, std::function<void(QString)>&& cb)
 	Q_UNUSED(parent);
 	g_receiver.onDone = std::move(cb);
 
-	QAndroidJniObject intent("android/content/Intent","()V");
-	intent.callObjectMethod("setAction", "(Ljava/lang/String;)Landroid/content/Intent;", QAndroidJniObject::fromString("android.intent.action.OPEN_DOCUMENT_TREE").object<jstring>());
+	QJNI_OBJECT_CLASS intent("android/content/Intent","()V");
+	intent.callObjectMethod("setAction", "(Ljava/lang/String;)Landroid/content/Intent;", QJNI_OBJECT_CLASS::fromString("android.intent.action.OPEN_DOCUMENT_TREE").object<jstring>());
 	intent.callObjectMethod("addFlags", "(I)Landroid/content/Intent;", intentFlags());
 
-	QtAndroid::startActivity(intent, kFolderPickerReqCode, &g_receiver);
+	START_ACTIVITY(intent, kFolderPickerReqCode, &g_receiver);
 
 #elif defined(VCMI_IOS)
 	SelectDirectory iosDirectorySelector;
@@ -332,23 +330,25 @@ QStringList findFilesForCopy(const QString &path)
 #ifdef VCMI_ANDROID
 	if(path.startsWith(QLatin1String("content://"), Qt::CaseInsensitive))
 	{
-		const QAndroidJniObject jUri = QAndroidJniObject::fromString(safeEncode(path));
-		const QAndroidJniObject jArr = QAndroidJniObject::callStaticObjectMethod("eu/vcmi/vcmi/util/FileUtil", "findFilesForCopy", "(Ljava/lang/String;Landroid/content/Context;)[Ljava/lang/String;", jUri.object<jstring>(), QtAndroid::androidContext().object());
+		const QJNI_OBJECT_CLASS jUri = QJNI_OBJECT_CLASS::fromString(safeEncode(path));
+		const QJNI_OBJECT_CLASS jArr = QJNI_OBJECT_CLASS::callStaticObjectMethod("eu/vcmi/vcmi/util/FileUtil", "findFilesForCopy", "(Ljava/lang/String;Landroid/content/Context;)[Ljava/lang/String;", jUri.object<jstring>(), QT_ACTIVITY.object());
 
 		QStringList out;
 		if(!jArr.isValid())
 			return out;
 
-		QAndroidJniEnvironment env;
 		const jobjectArray arr = static_cast<jobjectArray>(jArr.object<jobject>());
-		const jsize n = env->GetArrayLength(arr);
-		out.reserve(n);
-
-		for(jsize i = 0; i < n; ++i)
+		android::withJniEnv([&](JNIEnv * jniEnv)
 		{
-			QAndroidJniObject s((jstring)env->GetObjectArrayElement(arr, i));
-			out.push_back(s.toString());																// "src \t Target \t Name"
-		}
+			const jsize n = jniEnv->GetArrayLength(arr);
+			out.reserve(n);
+
+			for(jsize i = 0; i < n; ++i)
+			{
+				QJNI_OBJECT_CLASS s = static_cast<jstring>(jniEnv->GetObjectArrayElement(arr, i));
+				out.push_back(s.toString());																// "src \t Target \t Name"
+			}
+		});
 
 		return out;
 	}
@@ -399,9 +399,10 @@ void sendFileToApp(QString path)
 {
 #if defined(VCMI_ANDROID)
 	// delegate to Android activity which will copy to cache and share via FileProvider
-	auto jstr = QAndroidJniObject::fromString(path);
-	QtAndroid::runOnAndroidThread([jstr]() mutable {
-		QtAndroid::androidActivity().callMethod<void>("shareFile", "(Ljava/lang/String;)V", jstr.object<jstring>());
+	auto jstr = QJNI_OBJECT_CLASS::fromString(path);
+	RUN_ON_ANDROID_MAIN_THREAD([jstr]() /*mutable*/ {
+		JNI_CALL_METHOD(QT_ACTIVITY, void, "shareFile", "(Ljava/lang/String;)V", jstr.object<jstring>());
+		//return QVariant();
 	});
 #elif defined(VCMI_IOS)
 	// use iOS share sheet
@@ -473,14 +474,14 @@ QString findSteamGameInstallDir(const QString & appId, const QString & fallbackI
 #ifdef VCMI_ANDROID
 QString getInstallerPackageName()
 {
-	if(!QtAndroid::androidContext().isValid())
+	if(!QT_ACTIVITY.isValid())
 		return {};
 
-	return QAndroidJniObject::callStaticObjectMethod(
+	return QJNI_OBJECT_CLASS::callStaticObjectMethod(
 		"eu/vcmi/vcmi/util/FileUtil",
 		"getInstallerPackageName",
 		"(Landroid/content/Context;)Ljava/lang/String;",
-		QtAndroid::androidContext().object()
+		QT_ACTIVITY.object()
 	).toString();
 }
 #endif

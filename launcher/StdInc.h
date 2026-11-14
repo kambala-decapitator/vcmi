@@ -22,3 +22,6 @@
 
 #include "../vcmiqt/convpathqstring.h"
 
+#ifdef VCMI_ANDROID
+#include "android/qtcompat.h"
+#endif

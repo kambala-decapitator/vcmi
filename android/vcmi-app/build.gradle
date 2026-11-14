@@ -32,8 +32,8 @@ android {
 		buildConfig = true
 	}
 
-	// Extract native libraries from the APK
-	packagingOptions.jniLibs.useLegacyPackaging true
+	// Qt < 6.9
+	// packagingOptions.jniLibs.useLegacyPackaging true
 
 	defaultConfig {
 		applicationId = basePackageId
