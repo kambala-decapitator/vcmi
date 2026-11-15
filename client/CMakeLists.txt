@@ -175,6 +175,7 @@ set(vcmiclientcommon_SRCS
 	windows/InfoWindows.cpp
 	windows/QuickRecruitmentWindow.cpp
 	windows/CHeroBackpackWindow.cpp
+	windows/CHeroCostumesWindow.cpp
 	windows/CWindowWithArtifacts.cpp
 	windows/settings/GeneralOptionsTab.cpp
 	windows/settings/OtherOptionsTab.cpp
@@ -405,6 +406,7 @@ set(vcmiclientcommon_HEADERS
 	windows/InfoWindows.h
 	windows/QuickRecruitmentWindow.h
 	windows/CHeroBackpackWindow.h
+	windows/CHeroCostumesWindow.h
 	windows/CWindowWithArtifacts.h
 	windows/settings/GeneralOptionsTab.h
 	windows/settings/OtherOptionsTab.h

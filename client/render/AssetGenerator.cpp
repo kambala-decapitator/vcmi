@@ -106,7 +106,8 @@ void AssetGenerator::initialize()
 		};
 	}
 
-	addBackpackBackground("heroBackpackDialog", Point(426, 465));
+	addBackpackBackground("heroBackpackDialog", Point(426, 507));
+	addBackpackBackground("heroCostumesDialog", Point(426, 380));
 
 	imageFiles[ImagePath::builtin("questDialog.png")] = [this](){ return createQuestWindow();};
 	imageFiles[ImagePath::builtin("stackArtifactIndicatorSmall.png")] = [this](){ return createStackArtifactIndicator(Point(14, 14));};

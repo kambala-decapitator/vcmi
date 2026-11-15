@@ -22,6 +22,7 @@ public:
 	
 protected:
 	std::shared_ptr<CArtifactsOfHeroBackpack> arts;
+	std::shared_ptr<CButton> costumesButton;
 	std::vector<std::shared_ptr<CButton>> buttons;
 	const int windowMargin = 5;
 };

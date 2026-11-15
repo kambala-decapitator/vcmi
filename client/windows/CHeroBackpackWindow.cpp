@@ -9,9 +9,12 @@
  */
 #include "StdInc.h"
 #include "CHeroBackpackWindow.h"
+#include "CHeroCostumesWindow.h"
 
+#include "../GameEngine.h"
 #include "../GameInstance.h"
 #include "../gui/Shortcut.h"
+#include "../gui/WindowHandler.h"
 
 #include "../widgets/Buttons.h"
 #include "../widgets/Images.h"
@@ -34,8 +37,17 @@ CHeroBackpackWindow::CHeroBackpackWindow(const CGHeroInstance * hero, const std:
 	addUsedEvents(KEYBOARD);
 
 	const Point artifactsOffset(17, 18);
+	const Point contentTopLeft = Point(windowMargin, windowMargin) + artifactsOffset;
+
+	// button that opens the artifact costumes management window, placed above the artifacts list
+	costumesButton = std::make_shared<CButton>(Point(), AnimationPath::builtin("heroBackpackSort"),
+		CButton::tooltipLocalized("vcmi.heroWindow.openCostumes"),
+		[hero]() { ENGINE->windows().createAndPushWindow<CHeroCostumesWindow>(hero); });
+	costumesButton->moveTo(costumesButton->pos.topLeft() + contentTopLeft);
+	costumesButton->setTextOverlay(LIBRARY->generaltexth->translate("vcmi.heroWindow.artifactCostumes.hover"), EFonts::FONT_SMALL, Colors::YELLOW);
+
 	arts = std::make_shared<CArtifactsOfHeroBackpack>();
-	arts->moveBy(Point(windowMargin, windowMargin) + artifactsOffset);
+	arts->moveBy(contentTopLeft + Point(0, costumesButton->pos.h + artifactsOffset.y));
 	arts->clickPressedCallback = [this](const CArtPlace & artPlace, const Point & cursorPosition)
 	{
 		clickPressedOnArtPlace(arts->getHero(), artPlace.slot, true, false, true, cursorPosition);
