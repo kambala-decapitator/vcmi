@@ -724,7 +724,7 @@ if(ENABLE_LAUNCHER OR ENABLE_EDITOR)
 
 		# for Qt 5
 		# required by Qt, see Qt5AndroidSupport.cmake
-		set(QT_ANDROID_APPLICATION_BINARY vcmiclient)
+		set(QT_ANDROID_APPLICATION_BINARY vcmilauncher)
 
 		# proper way is to set ANDROID_SDK_PLATFORM, but Qt's CMake code has a bug:
 		# it sets 2 command line parameters in a single string, which we fix here

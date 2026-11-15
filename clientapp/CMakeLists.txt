@@ -49,11 +49,7 @@ else()
 	target_link_libraries(vcmiclient PRIVATE SDL2::SDL2)
 endif()
 
-# CMake Error at clientapp/CMakeLists.txt:39 (target_link_libraries):
-#   Target "vcmilauncher" of type MODULE_LIBRARY may not be linked into another
-#   target.  One may link only to INTERFACE, OBJECT, STATIC or SHARED
-#   libraries, or to executables with the ENABLE_EXPORTS property set.
-if(NOT (QT_VERSION_MAJOR GREATER_EQUAL 6 AND ANDROID) AND ENABLE_SINGLE_APP_BUILD AND ENABLE_LAUNCHER)
+if(NOT ANDROID AND ENABLE_SINGLE_APP_BUILD AND ENABLE_LAUNCHER)
 	target_link_libraries(vcmiclient PRIVATE vcmilauncher)
 endif()
 
