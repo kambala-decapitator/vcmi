@@ -717,8 +717,12 @@ endif()
 
 if(ENABLE_LAUNCHER OR ENABLE_EDITOR)
 	# TODO
-	set(QT_ANDROID_CREATE_SYMLINKS_ONLY ON)
 	if(ANDROID)
+		# for Qt 6
+		set(QT_ANDROID_CREATE_SYMLINKS_ONLY ON)
+		set(QT_NO_GLOBAL_APK_TARGET_PART_OF_ALL ON CACHE BOOL "" FORCE)
+
+		# for Qt 5
 		# required by Qt, see Qt5AndroidSupport.cmake
 		set(QT_ANDROID_APPLICATION_BINARY vcmiclient)
 
@@ -757,8 +761,7 @@ if(ENABLE_LAUNCHER OR ENABLE_EDITOR)
 
 	if(ANDROID AND NOT TARGET apk)
 		# Conan doesn't include this file by default, https://github.com/conan-io/conan-center-index/pull/31171
-		# TODO: check in Qt 6
-		include("${QT_PACKAGE_DIR}/lib/cmake/Qt${QT_VERSION_MAJOR}Core/Qt${QT_VERSION_MAJOR}AndroidSupport.cmake")
+		include("${QT_PACKAGE_DIR}/lib/cmake/Qt5Core/Qt5AndroidSupport.cmake")
 	endif()
 
 	# Target properties that specify Android-specific paths may contain generator expressions
@@ -898,10 +901,6 @@ if(ENABLE_EDITOR)
 	add_subdirectory(mapeditor)
 endif()
 
-if(ENABLE_LAUNCHER)
-	add_subdirectory(launcher)
-endif()
-
 if(ENABLE_LOBBY)
 	add_subdirectory(lobby)
 endif()
@@ -914,6 +913,10 @@ if (ENABLE_CLIENT)
 		add_subdirectory(clientsdl2)
 	endif()
 	add_subdirectory(clientapp)
+endif()
+
+if(ENABLE_LAUNCHER)
+	add_subdirectory(launcher)
 endif()
 
 if(ENABLE_SERVER)

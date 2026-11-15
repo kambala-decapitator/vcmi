@@ -83,6 +83,7 @@ int MAIN_EXPORT main(int argc, char * argv[])
 
 	MainWindow mainWindow;
 	mainWindow.show();
+	mainWindow.windowHandle()->setWindowState(Qt::WindowFullScreen);
 
 #if defined(VCMI_ANDROID) && QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	// changing language causes window to increase size over the bounds, force it back to proper value

@@ -209,9 +209,9 @@ if(ENABLE_TRANSLATIONS)
 endif()
 
 if(ANDROID)
-	# Qt 6 requirement
+	# Qt 6 requirement, todo: move down
     get_target_property(targetBinaryDir vcmilauncher BINARY_DIR)
-	set(androidQtBuildDir "${targetBinaryDir}/android-build" PARENT_SCOPE)
+	set(androidQtBuildDir "${targetBinaryDir}/android-build")
 
 	get_target_property(rccPath Qt${QT_VERSION_MAJOR}::rcc IMPORTED_LOCATION)
  
@@ -271,7 +271,7 @@ endif()
 
 if(ANDROID)
 	if(QT_VERSION_MAJOR GREATER_EQUAL 6)
-		target_link_libraries(vcmilauncher PRIVATE Qt${QT_VERSION_MAJOR}::CorePrivate)
+		target_link_libraries(vcmilauncher PRIVATE Qt${QT_VERSION_MAJOR}::CorePrivate vcmiclient)
 	else()
 		target_link_libraries(vcmilauncher PRIVATE Qt5::AndroidExtras)
 	endif()
@@ -333,7 +333,31 @@ if(IOS)
 			qt::QIOSIntegrationPlugin
 		)
 	endif()
-elseif(NOT ANDROID)
+elseif(ANDROID)
+	add_custom_target(android_deploy ALL
+		COMMAND ${CMAKE_COMMAND} --install "${CMAKE_BINARY_DIR}" --config "$<CONFIG>" --prefix "${androidQtBuildDir}"
+		COMMAND_EXPAND_LISTS
+		VERBATIM
+		COMMENT "Copy android libs"
+	)
+	add_dependencies(android_deploy vcmilauncher)
+
+	set(androidTargets apk aab)
+	if(QT_VERSION_MAJOR GREATER_EQUAL 6)
+		list(APPEND androidTargets aar)
+	endif()
+	foreach(androidTarget ${androidTargets})
+		set(wrapperTarget "build_${androidTarget}")	
+		add_custom_target(${wrapperTarget}
+			${CMAKE_COMMAND} -D "QT_ANDROID_TARGET=${androidTarget}" -P "${CMAKE_SOURCE_DIR}/cmake_modules/android_target_wrapper.cmake"
+			VERBATIM
+			USES_TERMINAL
+			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+			COMMENT "Building ${androidTarget}"
+		)
+		add_dependencies(${wrapperTarget} android_deploy)
+	endforeach()
+else()
 	install(TARGETS vcmilauncher DESTINATION ${BIN_DIR})
 
 	# Install icons and desktop file on Linux

@@ -257,14 +257,17 @@ public:
 		}
 
 		// Always return content:// tree URI
-		const QJNI_OBJECT_CLASS uri = data.callObjectMethod("getData","()Landroid/net/Uri;");
-		const QJNI_OBJECT_CLASS us  = uri.callObjectMethod("toString","()Ljava/lang/String;");
-		const QString pickedTree	= us.toString();
+		const auto uri = data.callObjectMethod("getData", "()Landroid/net/Uri;");
+		const auto us = uri.callObjectMethod("toString", "()Ljava/lang/String;");
+		const QString pickedTree = us.toString();
 
 		// Persist read+write permission
+		// TODO: not working
+		// java.lang.SecurityException: Permission Denial: reading com.android.externalstorage.ExternalStorageProvider uri
 		const QJNI_OBJECT_CLASS ctx = QT_ACTIVITY;
-		const QJNI_OBJECT_CLASS cr  = ctx.callObjectMethod("getContentResolver","()Landroid/content/ContentResolver;");
-		JNI_CALL_METHOD(cr, void, "takePersistableUriPermission", "(Landroid/net/Uri;I)V", uri.object<jobject>(), jint(1 | 2));
+		const auto cr = ctx.callObjectMethod("getContentResolver", "()Landroid/content/ContentResolver;");
+		cr.callMethod<void>("takePersistableUriPermission", "(Landroid/net/Uri;I)V", uri.object(), jint(1 | 2));
+		// JNI_CALL_METHOD(cr, void, "takePersistableUriPermission", "(Landroid/net/Uri;I)V", uri.object<jobject>(), jint(1 | 2));
 
 		// Bounce back to Qt thread
 		QMetaObject::invokeMethod(qApp, [cb, pickedTree]{ if (cb) cb(pickedTree); }, Qt::QueuedConnection);

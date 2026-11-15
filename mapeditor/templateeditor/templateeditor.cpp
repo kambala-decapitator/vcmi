@@ -68,7 +68,7 @@ TemplateEditor::TemplateEditor(QWidget * parent): QWidget{parent},
 
 	setTitle();
 
-	setWindowModality(Qt::ApplicationModal);
+	// setWindowModality(Qt::ApplicationModal);
 
 	show();
 }

@@ -82,7 +82,7 @@ CampaignEditor::CampaignEditor(EditorCallback * cb, QWidget * parent): QWidget{p
 
 	setTitle();
 
-	setWindowModality(Qt::ApplicationModal);
+	// setWindowModality(Qt::ApplicationModal);
 
 	show();
 }

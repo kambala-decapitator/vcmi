@@ -24,10 +24,10 @@ endif()
 assign_source_group(${clientapp_SRCS} ${clientapp_HEADERS})
 
 if(ANDROID)
-	add_library(vcmiclient SHARED ${clientapp_SRCS} ${clientapp_HEADERS})
+	add_library(vcmiclient OBJECT ${clientapp_SRCS} ${clientapp_HEADERS})
 	# ffmpeg requires -Bsymbolic on 64-bit Android for assembler functions to compile
 	if(ANDROID_ABI STREQUAL "arm64-v8a" OR ANDROID_ABI STREQUAL "x86_64")
-		target_link_options(vcmiclient PRIVATE -Wl,-Bsymbolic)
+		target_link_options(vcmiclient PUBLIC -Wl,-Bsymbolic)
 	endif()
 else()
 	add_executable(vcmiclient ${clientapp_SRCS} ${clientapp_HEADERS})
@@ -122,29 +122,29 @@ if(IOS)
 	)
 	install(TARGETS vcmiclient DESTINATION Payload COMPONENT app) # for ipa generation with cpack
 elseif(ANDROID)
-	add_custom_target(android_deploy ALL
-		COMMAND ${CMAKE_COMMAND} --install "${CMAKE_BINARY_DIR}" --config "$<CONFIG>" --prefix "${androidQtBuildDir}"
-		COMMAND_EXPAND_LISTS
-		VERBATIM
-		COMMENT "Copy android libs"
-	)
-	add_dependencies(android_deploy vcmiclient)
+	# add_custom_target(android_deploy ALL
+	# 	COMMAND ${CMAKE_COMMAND} --install "${CMAKE_BINARY_DIR}" --config "$<CONFIG>" --prefix "${androidQtBuildDir}"
+	# 	COMMAND_EXPAND_LISTS
+	# 	VERBATIM
+	# 	COMMENT "Copy android libs"
+	# )
+	# add_dependencies(android_deploy vcmiclient)
 
-	set(androidTargets apk aab)
-	if(QT_VERSION_MAJOR GREATER_EQUAL 6)
-		list(APPEND androidTargets aar)
-	endif()
-	foreach(androidTarget ${androidTargets})
-		set(wrapperTarget "build_${androidTarget}")	
-		add_custom_target(${wrapperTarget}
-			${CMAKE_COMMAND} -D "QT_ANDROID_TARGET=${androidTarget}" -P "${CMAKE_SOURCE_DIR}/cmake_modules/android_target_wrapper.cmake"
-			VERBATIM
-			USES_TERMINAL
-			WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-			COMMENT "Building ${androidTarget}"
-		)
-		add_dependencies(${wrapperTarget} android_deploy)
-	endforeach()
+	# set(androidTargets apk aab)
+	# if(QT_VERSION_MAJOR GREATER_EQUAL 6)
+	# 	list(APPEND androidTargets aar)
+	# endif()
+	# foreach(androidTarget ${androidTargets})
+	# 	set(wrapperTarget "build_${androidTarget}")	
+	# 	add_custom_target(${wrapperTarget}
+	# 		${CMAKE_COMMAND} -D "QT_ANDROID_TARGET=${androidTarget}" -P "${CMAKE_SOURCE_DIR}/cmake_modules/android_target_wrapper.cmake"
+	# 		VERBATIM
+	# 		USES_TERMINAL
+	# 		WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+	# 		COMMENT "Building ${androidTarget}"
+	# 	)
+	# 	add_dependencies(${wrapperTarget} android_deploy)
+	# endforeach()
 else()
 	install(TARGETS vcmiclient DESTINATION ${BIN_DIR})
 endif()

@@ -12,7 +12,7 @@ import eu.vcmi.vcmi.NativeMethods;
  */
 public final class LibsLoader
 {
-    public static final String CLIENT_LIB = "vcmiclient_"
+    public static final String CLIENT_LIB = "vcmilauncher_"
         + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? Build.SUPPORTED_ABIS[0] : Build.CPU_ABI);
 
     // not used in single-process build
