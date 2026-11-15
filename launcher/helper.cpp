@@ -208,7 +208,8 @@ bool canUseFolderPicker()
 
 	if(uiModeMgr.isValid())
 	{
-		jint mode = JNI_CALL_METHOD(uiModeMgr, jint, "getCurrentModeType", "()I");
+		// jint mode = JNI_CALL_METHOD(uiModeMgr, jint, "getCurrentModeType", "()I");
+		jint mode = uiModeMgr.callMethod<jint>("getCurrentModeType", "()I");
 		jint TV = QJNI_OBJECT_CLASS::getStaticField<jint>("android/content/res/Configuration", "UI_MODE_TYPE_TELEVISION");
 		if(mode == TV)
 			return false;
