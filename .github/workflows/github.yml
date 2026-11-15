@@ -3,7 +3,7 @@ name: Daily Builds and Tests
 on:
   push:
     branches:
-      - beta
+      - android-qt6
       - master
       - develop
   pull_request:
@@ -31,95 +31,95 @@ jobs:
     strategy:
       matrix:
         include:
-          - platform: mac-intel
-            os: macos-26
-            pack: 1
-            upload: 1
-            pack_type: Release
-            extension: dmg
-            before_install: macos.sh
-            preset: macos-conan-ninja-release
-            conan_profile: macos-intel
-            conan_prebuilts: dependencies-mac-intel
-            conan_options: --profile=dependencies/conan_profiles/base/apple-system
-            artifact_platform: intel
-            update_platform: macos-x64
+          # - platform: mac-intel
+          #   os: macos-26
+          #   pack: 1
+          #   upload: 1
+          #   pack_type: Release
+          #   extension: dmg
+          #   before_install: macos.sh
+          #   preset: macos-conan-ninja-release
+          #   conan_profile: macos-intel
+          #   conan_prebuilts: dependencies-mac-intel
+          #   conan_options: --profile=dependencies/conan_profiles/base/apple-system
+          #   artifact_platform: intel
+          #   update_platform: macos-x64
 
-          - platform: mac-arm
-            os: macos-26
-            pack: 1
-            upload: 1
-            pack_type: Release
-            extension: dmg
-            before_install: macos.sh
-            preset: macos-arm-conan-ninja-release
-            conan_profile: macos-arm
-            conan_prebuilts: dependencies-mac-arm
-            conan_options: --profile=dependencies/conan_profiles/base/apple-system
-            artifact_platform: arm
-            update_platform: macos-arm64
+          # - platform: mac-arm
+          #   os: macos-26
+          #   pack: 1
+          #   upload: 1
+          #   pack_type: Release
+          #   extension: dmg
+          #   before_install: macos.sh
+          #   preset: macos-arm-conan-ninja-release
+          #   conan_profile: macos-arm
+          #   conan_prebuilts: dependencies-mac-arm
+          #   conan_options: --profile=dependencies/conan_profiles/base/apple-system
+          #   artifact_platform: arm
+          #   update_platform: macos-arm64
 
-          - platform: mac-homebrew
-            os: macos-latest
-            before_install: macos-brew.sh
-            preset: macos-ninja-release
+          # - platform: mac-homebrew
+          #   os: macos-latest
+          #   before_install: macos-brew.sh
+          #   preset: macos-ninja-release
 
-          - platform: ios
-            os: macos-26
-            pack: 1
-            upload: 1
-            pack_type: RelWithDebInfo
-            extension: ipa
-            before_install: macos.sh
-            preset: ios-release-conan-ccache
-            conan_profile: ios-arm64
-            conan_prebuilts: dependencies-ios
-            conan_options: --profile=dependencies/conan_profiles/base/apple-system
-            update_platform: ios-arm64
+          # - platform: ios
+          #   os: macos-26
+          #   pack: 1
+          #   upload: 1
+          #   pack_type: RelWithDebInfo
+          #   extension: ipa
+          #   before_install: macos.sh
+          #   preset: ios-release-conan-ccache
+          #   conan_profile: ios-arm64
+          #   conan_prebuilts: dependencies-ios
+          #   conan_options: --profile=dependencies/conan_profiles/base/apple-system
+          #   update_platform: ios-arm64
 
-          - platform: msvc-x64
-            arch: x64
-            toolset: '14.29'
-            os: windows-2025-vs2026
-            pack: 1
-            upload: 1
-            pack_type: RelWithDebInfo
-            extension: zip
-            preset: windows-msvc-ninja-release
-            conan_profile: msvc-x64
-            conan_prebuilts: dependencies-windows-x64
-            conan_options: -s "&:build_type=RelWithDebInfo" -o "&:target_pre_windows10=True"
-            artifact_platform: x64
-            update_platform: windows-x64
+          # - platform: msvc-x64
+          #   arch: x64
+          #   toolset: '14.29'
+          #   os: windows-2025-vs2026
+          #   pack: 1
+          #   upload: 1
+          #   pack_type: RelWithDebInfo
+          #   extension: zip
+          #   preset: windows-msvc-ninja-release
+          #   conan_profile: msvc-x64
+          #   conan_prebuilts: dependencies-windows-x64
+          #   conan_options: -s "&:build_type=RelWithDebInfo" -o "&:target_pre_windows10=True"
+          #   artifact_platform: x64
+          #   update_platform: windows-x64
 
-          - platform: msvc-x86
-            arch: amd64_x86
-            toolset: '14.29'
-            os: windows-2025-vs2026
-            pack: 1
-            upload: 1
-            pack_type: RelWithDebInfo
-            extension: zip
-            preset: windows-msvc-ninja-release-x86
-            conan_profile: msvc-x86
-            conan_prebuilts: dependencies-windows-x86
-            conan_options: -s "&:build_type=RelWithDebInfo" -o "&:target_pre_windows10=True"
-            artifact_platform: x86
-            update_platform: windows-x86
+          # - platform: msvc-x86
+          #   arch: amd64_x86
+          #   toolset: '14.29'
+          #   os: windows-2025-vs2026
+          #   pack: 1
+          #   upload: 1
+          #   pack_type: RelWithDebInfo
+          #   extension: zip
+          #   preset: windows-msvc-ninja-release-x86
+          #   conan_profile: msvc-x86
+          #   conan_prebuilts: dependencies-windows-x86
+          #   conan_options: -s "&:build_type=RelWithDebInfo" -o "&:target_pre_windows10=True"
+          #   artifact_platform: x86
+          #   update_platform: windows-x86
 
-          - platform: msvc-arm64
-            arch: arm64
-            os: windows-11-vs2026-arm
-            pack: 1
-            upload: 1
-            pack_type: RelWithDebInfo
-            extension: zip
-            preset: windows-msvc-ninja-release-arm64
-            conan_profile: msvc-arm64
-            conan_prebuilts: dependencies-windows-arm64
-            conan_options: -s "&:build_type=RelWithDebInfo"
-            artifact_platform: arm64
-            update_platform: windows-arm64
+          # - platform: msvc-arm64
+          #   arch: arm64
+          #   os: windows-11-vs2026-arm
+          #   pack: 1
+          #   upload: 1
+          #   pack_type: RelWithDebInfo
+          #   extension: zip
+          #   preset: windows-msvc-ninja-release-arm64
+          #   conan_profile: msvc-arm64
+          #   conan_prebuilts: dependencies-windows-arm64
+          #   conan_options: -s "&:build_type=RelWithDebInfo"
+          #   artifact_platform: arm64
+          #   update_platform: windows-arm64
 
           - platform: android-32
             os: ubuntu-24.04
@@ -154,27 +154,27 @@ jobs:
             artifact_platform: x64
             update_platform: android-x64
 
-          - platform: linux-appimage-x64
-            os: ubuntu-24.04
-            upload: 1
-            preset: linux-gcc-release-appimage
-            conan_profile: linux-x64
-            conan_prebuilts: dependencies-linux-x64
-            before_install: linux_appimage.sh
-            extension: AppImage
-            artifact_platform: x86_64
-            update_platform: linux-x64
+          # - platform: linux-appimage-x64
+          #   os: ubuntu-24.04
+          #   upload: 1
+          #   preset: linux-gcc-release-appimage
+          #   conan_profile: linux-x64
+          #   conan_prebuilts: dependencies-linux-x64
+          #   before_install: linux_appimage.sh
+          #   extension: AppImage
+          #   artifact_platform: x86_64
+          #   update_platform: linux-x64
 
-          - platform: linux-appimage-arm64
-            os: ubuntu-24.04-arm
-            upload: 1
-            preset: linux-gcc-release-arm64-appimage
-            conan_profile: linux-arm64
-            conan_prebuilts: dependencies-linux-arm64
-            before_install: linux_appimage.sh
-            extension: AppImage
-            artifact_platform: arm64
-            update_platform: linux-arm64
+          # - platform: linux-appimage-arm64
+          #   os: ubuntu-24.04-arm
+          #   upload: 1
+          #   preset: linux-gcc-release-arm64-appimage
+          #   conan_profile: linux-arm64
+          #   conan_prebuilts: dependencies-linux-arm64
+          #   before_install: linux_appimage.sh
+          #   extension: AppImage
+          #   artifact_platform: arm64
+          #   update_platform: linux-arm64
 
     runs-on: ${{ matrix.os }}
     env:
@@ -507,607 +507,607 @@ jobs:
         path: |
             ${{ env.IOS_APPSTORE_SYMBOLS_DIR }}
 
-    - name: Upload build to download.vcmi.eu
-      id: upload_build
-      if: ${{ matrix.upload == 1 && github.event.number == '' && env.BUILDS_UPLOADER_PRIVATE_KEY != '' }}
-      run: |
-        if [ -z '${{ env.ANDROID_APK_PATH }}' ] ; then
-          cd "$BUILD_DIR"
-        fi
-        source '${{github.workspace}}/CI/upload_package.sh'
-      env:
-        BUILDS_UPLOADER_PRIVATE_KEY: ${{ secrets.BUILDS_UPLOADER_PRIVATE_KEY }}
-        PACKAGE_EXTENSION: ${{ matrix.extension }}
-
-    - name: Prepare update information
-      if: ${{ steps.upload_build.outcome == 'success' }}
-      run: |
-        python3 CI/build_manifest.py file "$BUILD_DIR/${{ env.VCMI_PACKAGE_FILE_NAME }}.${{ matrix.extension }}" '${{ matrix.update_platform }}' package
-
-    - name: Upload update information
-      if: ${{ steps.upload_build.outcome == 'success' }}
-      uses: actions/upload-artifact@v7
-      with:
-        name: update-info-${{ matrix.update_platform }}-package
-        path: .update-info/${{ matrix.update_platform }}-package.json
-
-    - name: Prepare partial JSON with build informations
-      id: make_partial_json
-      env:
-        PLATFORM: ${{ matrix.platform }}
-        ARTIFACT_URL: ${{ steps.upload_artifact.outputs.artifact-url }}
-        DEBUG_SYMBOLS_URL: ${{ steps.upload_symbols.outputs.artifact-url }}
-        AAB_URL: ${{ steps.upload_aab.outputs.artifact-url }}
-      run: |
-        python3 CI/emit_partial.py
-
-    - name: Upload partial JSON with build informations
-      uses: actions/upload-artifact@v7
-      with:
-        name: partial-json-${{ matrix.platform }}
-        path: .summary/${{ matrix.platform }}.json
-
-  upload-source-package:
-    name: Upload Source Code Package
-    if: always() && github.event.number == ''
-    runs-on: ubuntu-latest
-    steps:
-        - uses: actions/checkout@v7
-          with:
-            submodules: recursive
-
-        - name: Build Number
-          run: |
-            source '${{github.workspace}}/CI/get_package_name.sh'
-            echo VCMI_PACKAGE_FILE_NAME="$VCMI_PACKAGE_FILE_NAME" >> $GITHUB_ENV
-
-        - name: Create source code archive (including submodules)
-          run: |
-            git archive HEAD -o "release.tar" --worktree-attributes -v
-            git submodule update --init --recursive
-            git submodule --quiet foreach 'cd "$toplevel"; tar -rvf "release.tar" "$sm_path"'
-            gzip release.tar
-
-        - name: Upload source code archive
-          id: upload_source
-          uses: actions/upload-artifact@v7
-          with:
-            archive: false
-            path: |
-              ./release.tar.gz
-
-        - name: Prepare partial JSON with source informations
-          shell: bash
-          run: |
-            mkdir -p .summary
-            cat > .summary/source.json <<JSON
-            {"source_url": "${{ steps.upload_source.outputs.artifact-url }}"}
-            JSON
-
-        - name: Upload partial JSON with source informations
-          uses: actions/upload-artifact@v7
-          with:
-            name: partial-json-source
-            path: .summary/source.json
-
-  test:
-    name: Build+Test (${{ matrix.platform }})
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - platform: gcc-latest-release
-            os: ubuntu-26.04
-            before_install: linux_qt6.sh
-            compiler_cxx: g++-15
-            compiler_cc: gcc-15
-            preset: linux-gcc-test
-
-          - platform: clang-latest-debug
-            os: ubuntu-26.04
-            before_install: linux_qt6.sh
-            compiler_cxx: clang++-22
-            compiler_cc: clang-22
-            preset: linux-clang-debug
-
-          - platform: gcc-oldest-debug
-            os: ubuntu-22.04
-            before_install: linux_qt5.sh
-            compiler_cxx: g++-10
-            compiler_cc: gcc-10
-            preset: linux-gcc-debug
-
-          - platform: clang-oldest-release
-            os: ubuntu-24.04
-            before_install: linux_qt5.sh
-            compiler_cxx: clang++-16
-            compiler_cc: clang-16
-            preset: linux-clang-test
-
-    runs-on: ${{ matrix.os }}
-    env:
-      BUILD_DIR: ${{ github.workspace }}/out/build/${{ matrix.preset }}
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v7
-      with:
-        submodules: recursive
-
-    - name: Prepare APT staging dir
-      if: contains(matrix.os, 'ubuntu')
-      run: mkdir -p "$RUNNER_TEMP/apt-cache"
-
-    - name: APT cache restore
-      if: contains(matrix.os, 'ubuntu')
-      id: aptcache
-      uses: actions/cache/restore@v6
-      with:
-        path: ${{ runner.temp }}/apt-cache
-        key: ${{ matrix.platform }}-apt-${{ matrix.os }}
-        restore-keys: |
-          ${{ matrix.platform }}-apt-${{ matrix.os }}
-
-    - name: Prepare CI
-      run: source '${{ github.workspace }}/CI/before_install/${{ matrix.before_install }}'
-
-    - name: APT cache save
-      if: contains(matrix.os, 'ubuntu') && steps.aptcache.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v6
-      with:
-        path: ${{ runner.temp }}/apt-cache
-        key: ${{ steps.aptcache.outputs.cache-primary-key }}
-
-    - name: Setup compiler cache for PRs
-      uses: step-security/ccache-action@v1
-      if: ${{ github.event.number != '' }}
-      with:
-        key: ${{ matrix.platform }}-PR-${{ github.event.number }}
-        restore-keys: |
-          ${{ matrix.platform }}-PR-${{ github.event.number }}
-          ${{ matrix.platform }}-branch-${{ github.base_ref }}
-          ${{ matrix.platform }}-
-        max-size: '5G'
-        verbose: 2
-        job-summary: ""
-
-    - name: Setup compiler cache for branch builds
-      uses: step-security/ccache-action@v1
-      if: ${{ github.event.number == '' }}
-      with:
-        key: ${{ matrix.platform }}-branch-${{ github.ref_name }}
-        restore-keys: |
-          ${{ matrix.platform }}-branch-${{ github.ref_name }}
-          ${{ matrix.platform }}-
-        max-size: '5G'
-        verbose: 2
-        job-summary: ""
-
-    - name: Prepare Heroes 3 data
-      run: |
-        data_url="https://github.com/vcmi-mods/vcmi-test-data/releases/download/v2.0/heroes3.7z"
-        wget --progress=dot:giga "$data_url" -O heroes3.7z
-        mkdir -p ~/.local/share/vcmi/
-        7za x -o"$HOME/.local/share/vcmi/" heroes3.7z
-
-    - name: Configure
-      run: |
-        cmake -DENABLE_CCACHE:BOOL=ON -DCMAKE_C_COMPILER=${{ matrix.compiler_cc }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} --preset ${{ matrix.preset }}
-
-    - name: Build
-      run: |
-        cmake --build --preset ${{matrix.preset}}
-
-    - name: Test
-      run: |
-        ctest --preset ${{matrix.preset}}
-
-    - name: Validate library startup
-      run: |
-        cd "$BUILD_DIR/bin"
-        ./vcmiserver --dummy-run 2> >(tee error.log)
-        if [ ! -s error.log ]; then
-            echo "Validation OK!"
-            exit 0
-        else
-            echo "Validation failed!"
-            exit 1
-        fi
-
-    - name: Prepare partial JSON with test cache information
-      if: always()
-      env:
-        PLATFORM: ${{ matrix.platform }}
-        PYTHONPATH: ${{ github.workspace }}/CI
-      run: |
-        python3 CI/emit_test_partial.py
-
-    - name: Upload partial JSON with test cache information
-      if: always()
-      uses: actions/upload-artifact@v7
-      with:
-        name: partial-json-test-${{ matrix.platform }}
-        path: .summary/test-${{ matrix.platform }}.json
-
-  lobby:
-    name: Build VCMI Lobby
-    # Warning: Lobby .deb must be build on the same Ubuntu version and arch as our server. Do not change to ubuntu-latest
-    runs-on: ubuntu-24.04
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v7
-
-    - name: Prepare CI
-      run: sudo apt update && sudo apt install devscripts debhelper build-essential cmake zlib1g-dev libboost-dev libboost-date-time-dev libboost-program-options-dev libboost-filesystem-dev libboost-iostreams-dev libminizip-dev libsqlite3-dev 
-
-    - name: Build Number
-      run: |
-        source '${{github.workspace}}/CI/get_package_name.sh'
-        VCMI_PACKAGE_FILE_NAME+="-x64"
-        echo VCMI_PACKAGE_FILE_NAME="$VCMI_PACKAGE_FILE_NAME" >> $GITHUB_ENV
-        echo VCMI_PACKAGE_BUILD="$VCMI_PACKAGE_BUILD" >> $GITHUB_ENV
-        echo VCMI_PACKAGE_NAME_SUFFIX="$VCMI_PACKAGE_NAME_SUFFIX" >> $GITHUB_ENV
-        echo VCMI_PACKAGE_GOLDMASTER="$VCMI_PACKAGE_GOLDMASTER" >> $GITHUB_ENV
-        echo VCMI_PACKAGE_UPDATE_CHANNEL="$VCMI_PACKAGE_UPDATE_CHANNEL" >> $GITHUB_ENV
-      env:
-        PULL_REQUEST: ${{ github.event.pull_request.number }}
-
-    - name: Prepare debian directory
-      run: cp -r packaging/ubuntu debian && cp -r packaging/ubuntu-lobby/. debian/
-
-    - name: Build .deb
-      run: debuild -us -uc -b
-
-    - name: Move .deb package
-      run: mv ../vcmi-lobby_*_amd64.deb "${{ env.VCMI_PACKAGE_FILE_NAME }}.deb"
-
-    - name: Upload Artifact
-      id: upload_artifact
-      uses: actions/upload-artifact@v7
-      with:
-        archive: false
-        path: ${{github.workspace}}/${{ env.VCMI_PACKAGE_FILE_NAME }}.deb
-
-  updates:
-    name: Build VCMI Update Service
-    # Same Ubuntu version as the server that hosts updates.vcmi.eu
-    runs-on: ubuntu-26.04
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v7
-
-    - name: Prepare CI
-      run: sudo apt update && sudo apt install devscripts debhelper build-essential python3
-
-    - name: Build Number
-      run: |
-        source '${{github.workspace}}/CI/get_package_name.sh'
-        VCMI_PACKAGE_FILE_NAME+="-updates"
-        echo VCMI_PACKAGE_FILE_NAME="$VCMI_PACKAGE_FILE_NAME" >> $GITHUB_ENV
-      env:
-        PULL_REQUEST: ${{ github.event.pull_request.number }}
-
-    - name: Prepare debian directory
-      run: cp -r packaging/ubuntu-updates debian
-
-    # Also runs the unit tests in updates/tests
-    - name: Build .deb
-      run: debuild -us -uc -b
-
-    - name: Move .deb package
-      run: mv ../vcmi-updates_*_all.deb "${{ env.VCMI_PACKAGE_FILE_NAME }}.deb"
-
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v7
-      with:
-        archive: false
-        path: ${{github.workspace}}/${{ env.VCMI_PACKAGE_FILE_NAME }}.deb
-
-  windows-installer:
-    needs: build
-    if: ${{ needs.build.result == 'success' }}
-    name: Create Windows Installer (${{ matrix.arch }})
-    strategy:
-      matrix:
-        include:
-          - platform: msvc-x64
-            arch: x64
-            os: windows-2025
-            update_platform: windows-x64
-
-          - platform: msvc-x86
-            arch: x86
-            os: windows-2025
-            update_platform: windows-x86
-
-          - platform: msvc-arm64
-            arch: arm64
-            os: windows-11-arm
-            update_platform: windows-arm64
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v7
-      with:
-        submodules: recursive
-
-    - name: Extract version info
-      id: extract-version
-      run: |
-        filePath="${GITHUB_WORKSPACE}/cmake_modules/VersionDefinition.cmake"
-
-        major=$(grep -m 1 "VCMI_VERSION_MAJOR" "$filePath" | tr -d -c 0-9)
-        minor=$(grep -m 1 "VCMI_VERSION_MINOR" "$filePath" | tr -d -c 0-9)
-        patch=$(grep -m 1 "VCMI_VERSION_PATCH" "$filePath" | tr -d -c 0-9)
-
-        short_version="${major}.${minor}.${patch}"
-        version_timestamp=$(date +"%Y%m%d%H%M%S")
-
-        echo "short_version=${short_version}" >> "$GITHUB_OUTPUT"
-        echo "version_timestamp=${version_timestamp}" >> "$GITHUB_OUTPUT"
-
-    - name: Download UCRT
-      run: source '${{github.workspace}}/CI/wininstaller/download_ucrt.sh' '${{matrix.platform}}'
-
-    - name: Build Number
-      run: |
-        source '${{github.workspace}}/CI/get_package_name.sh'
-        VCMI_PACKAGE_FILE_NAME+="-${{ matrix.arch }}"
-        echo VCMI_PACKAGE_FILE_NAME="$VCMI_PACKAGE_FILE_NAME" >> $GITHUB_ENV
-        echo VCMI_PACKAGE_BUILD="$VCMI_PACKAGE_BUILD" >> $GITHUB_ENV
-        echo VCMI_PACKAGE_NAME_SUFFIX="$VCMI_PACKAGE_NAME_SUFFIX" >> $GITHUB_ENV
-        echo VCMI_PACKAGE_GOLDMASTER="$VCMI_PACKAGE_GOLDMASTER" >> $GITHUB_ENV
-        echo VCMI_PACKAGE_UPDATE_CHANNEL="$VCMI_PACKAGE_UPDATE_CHANNEL" >> $GITHUB_ENV
-      env:
-        PULL_REQUEST: ${{ github.event.pull_request.number }}
-
-    - name: Download Artifact
-      uses: actions/download-artifact@v8
-      with:
-        name: ${{ env.VCMI_PACKAGE_FILE_NAME }}.zip
-        path: ${{github.workspace}}/artifact
-
-    - name: Ensure Inno Setup is installed
-      run: |
-        if [ ! -f "/c/Program Files (x86)/Inno Setup 6/ISCC.exe" ] && [ ! -f "/c/ProgramData/Chocolatey/bin/ISCC.exe" ]; then
-          choco install innosetup --no-progress -y
-        fi
-
-    - name: Build VCMI Installer
-      run: >
-        CI\wininstaller\build_installer.cmd
-        "${{ steps.extract-version.outputs.short_version }}"
-        "${{ env.VCMI_PACKAGE_BUILD }}"
-        "${{ matrix.arch }}"
-        "VCMI ${{ env.VCMI_PACKAGE_NAME_SUFFIX }}"
-        "${{ env.VCMI_PACKAGE_FILE_NAME }}"
-        "${{ github.workspace }}\artifact"
-        "${{ github.workspace }}\ucrt"
-      shell: cmd
-
-    - name: Upload VCMI Installer Artifacts
-      id: upload_installer
-      uses: actions/upload-artifact@v7
-      with:
-        archive: false
-        path: |
-          ${{ github.workspace }}/CI/wininstaller/Output/*.exe
-
-    - name: Upload Installer
-      id: upload_installer_build
-      if: ${{ github.event.number == '' && env.BUILDS_UPLOADER_PRIVATE_KEY != '' }}
-      run: |
-        cd '${{github.workspace}}/CI/wininstaller/Output'
-        source '${{github.workspace}}/CI/upload_package.sh'
-      env:
-        BUILDS_UPLOADER_PRIVATE_KEY: ${{ secrets.BUILDS_UPLOADER_PRIVATE_KEY }}
-        PACKAGE_EXTENSION: exe
-
-    - name: Prepare update information
-      if: ${{ steps.upload_installer_build.outcome == 'success' }}
-      run: |
-        python3 CI/build_manifest.py file '${{github.workspace}}/CI/wininstaller/Output/${{ env.VCMI_PACKAGE_FILE_NAME }}.exe' '${{ matrix.update_platform }}' installer
-
-    - name: Upload update information
-      if: ${{ steps.upload_installer_build.outcome == 'success' }}
-      uses: actions/upload-artifact@v7
-      with:
-        name: update-info-${{ matrix.update_platform }}-installer
-        path: .update-info/${{ matrix.update_platform }}-installer.json
-
-    - name: Prepare partial JSON with installer informations
-      shell: bash
-      run: |
-        mkdir -p .summary
-        cat > .summary/installer-${{ matrix.platform }}.json <<JSON
-        {
-          "platform": "${{ matrix.platform }}",
-          "installer_url": "${{ steps.upload_installer.outputs.artifact-url }}"
-        }
-        JSON
-
-    - name: Upload partial JSON with installer informations
-      uses: actions/upload-artifact@v7
-      with:
-        name: partial-json-${{ matrix.platform }}-installer
-        path: .summary/installer-${{ matrix.platform }}.json
-
-  validate-code:
-    name: Validate Code
-    if: always()
-    runs-on: ubuntu-24.04
-
-    steps:
-        - uses: actions/checkout@v7
-        - name: Ensure LF line endings
-          run: |
-            find . -path ./.git -prune -o -path ./AI/FuzzyLite -prune -o -path ./test/googletest \
-            -o -path ./osx  -prune -o -type f \
-            -not -name '*.png' -and -not -name '*.ttf' -and -not -name '*.wav' -and -not -name '*.webm' -and -not -name '*.ico' -and -not -name '*.bat' -and -not -name '*.cmd' -and -not -name '*.iss' -and -not -name '*.isl' -print0 | \
-            { ! xargs -0 grep -l -z -P '\r\n'; }
-
-        - name: Validate JSON
-          run: |
-            sudo apt install python3-jstyleson
-            python3 CI/validate_json.py
-
-        - name: Validate relative local includes
-          run: |
-            python3 CI/normalize_relative_includes.py --repo .
-
-        - name: Validate Markdown
-          uses: DavidAnson/markdownlint-cli2-action@v25.0.0
-          with:
-            config: 'CI/example.markdownlint-cli2.jsonc'
-            globs: '**/*.md'
-
-  build-manifest:
-    name: Upload Build Manifest
-    # Runs after all uploads of this run, so that every build listed in the manifest is already on the server
-    needs: [build, windows-installer]
-    if: ${{ !cancelled() && github.event.number == '' }}
-    runs-on: ubuntu-latest
-    # Without the uploader key nothing was uploaded, so there is no update information and no manifest is created
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-
-      - name: Download update information
-        uses: actions/download-artifact@v8
-        with:
-          pattern: update-info-*
-          merge-multiple: true
-          path: update-info
-
-      - name: Build Number
-        run: |
-          source '${{github.workspace}}/CI/get_package_name.sh'
-          echo VCMI_PACKAGE_FILE_NAME="$VCMI_PACKAGE_FILE_NAME" >> $GITHUB_ENV
-        env:
-          PULL_REQUEST: ${{ github.event.pull_request.number }}
-
-      - name: Create build manifest
-        run: python3 CI/build_manifest.py create update-info "${{ env.VCMI_PACKAGE_FILE_NAME }}.json"
-
-      - name: Upload build manifest to download.vcmi.eu
-        if: ${{ hashFiles(format('{0}.json', env.VCMI_PACKAGE_FILE_NAME)) != '' }}
-        run: source '${{github.workspace}}/CI/upload_package.sh'
-        env:
-          BUILDS_UPLOADER_PRIVATE_KEY: ${{ secrets.BUILDS_UPLOADER_PRIVATE_KEY }}
-          PACKAGE_EXTENSION: json
-
-  final-summary:
-    name: Build report
-    if: always()
-    needs: [build, windows-installer, validate-code, test, upload-source-package]
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-      actions: write                   # Partial JSON artifacts can't be deleted in PRs
-    steps:
-      - name: Checkout (for script path)
-        uses: actions/checkout@v7
-        with:
-          sparse-checkout: |
-            CI/final_summary.py
-
-      - name: Download all partial JSON artifacts
-        continue-on-error: true
-        uses: actions/download-artifact@v8
-        with:
-          pattern: partial-json-*
-          merge-multiple: true
-          path: partials
-
-      - name: Run final summary
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          python3 CI/final_summary.py
-
-  draft-release:
-    name: Create draft release
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    needs: [build, windows-installer, upload-source-package]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v7
-
-      - name: Extract version
-        id: version
-        run: |
-          f=cmake_modules/VersionDefinition.cmake
-          major=$(grep -m1 VCMI_VERSION_MAJOR "$f" | tr -dc 0-9)
-          minor=$(grep -m1 VCMI_VERSION_MINOR "$f" | tr -dc 0-9)
-          patch=$(grep -m1 VCMI_VERSION_PATCH "$f" | tr -dc 0-9)
-          if [ "$patch" = "0" ]; then tag="${major}.${minor}"; else tag="${major}.${minor}.${patch}"; fi
-          echo "tag=$tag" >> "$GITHUB_OUTPUT"
-
-      - name: Download all artifacts
-        uses: actions/download-artifact@v8
-        with:
-          path: dl
-
-      - name: Stage release assets
-        run: |
-          set -euo pipefail
-          mkdir release
-          for d in dl/*/; do
-            name=$(basename "$d")
-            case "$name" in
-              partial-json-*) continue ;;
-              *-msvc-x64-symbols)   (cd "$d" && zip -qr9 "$GITHUB_WORKSPACE/release/VCMI-Windows-x64-symbols.zip" .) ;;
-              *-msvc-x86-symbols)   (cd "$d" && zip -qr9 "$GITHUB_WORKSPACE/release/VCMI-Windows-x86-symbols.zip" .) ;;
-              *-msvc-arm64-symbols) (cd "$d" && zip -qr9 "$GITHUB_WORKSPACE/release/VCMI-Windows-arm64-symbols.zip" .) ;;
-              *)
-                for f in "$d"*; do
-                  [ -f "$f" ] || continue
-                  case "$(basename "$f")" in
-                    *-intel.dmg)       mv "$f" release/VCMI-macOS-intel.dmg ;;
-                    *-arm.dmg)         mv "$f" release/VCMI-macOS-arm.dmg ;;
-                    *.ipa)             mv "$f" release/VCMI-iOS.ipa ;;
-                    *-x64.zip)         mv "$f" release/VCMI-Windows.zip ;;
-                    *-x64.exe)         mv "$f" release/VCMI-Windows-x64.exe ;;
-                    *-x86.exe)         mv "$f" release/VCMI-Windows-x86.exe ;;
-                    *-arm64.exe)       mv "$f" release/VCMI-Windows-arm64.exe ;;
-                    *-armeabi-v7a.apk) mv "$f" release/VCMI-Android-armeabi-v7a.apk ;;
-                    *-arm64-v8a.apk)   mv "$f" release/VCMI-Android-arm64-v8a.apk ;;
-                    *-x64.apk)         mv "$f" release/VCMI-Android-x86_64.apk ;;
-                    *-armeabi-v7a.aab) mv "$f" release/VCMI-Android-armeabi-v7a.aab ;;
-                    *-arm64-v8a.aab)   mv "$f" release/VCMI-Android-arm64-v8a.aab ;;
-                    *-x64.aab)         mv "$f" release/VCMI-Android-x86_64.aab ;;
-                    *-x86_64.AppImage) mv "$f" release/VCMI-Linux-x64.AppImage ;;
-                    *-arm64.AppImage)  mv "$f" release/VCMI-Linux-arm64.AppImage ;;
-                    release.tar.gz)    mv "$f" release/VCMI-Sources.tar.gz ;;
-                  esac
-                done
-                ;;
-            esac
-          done
-          ls -la release
-
-      - name: Refresh draft release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ steps.version.outputs.tag }}
-        run: |
-          state=$(gh release view "$TAG" --json isDraft -q .isDraft 2>/dev/null || echo missing)
-          if [ "$state" = "true" ]; then
-            gh release delete "$TAG" --yes
-          elif [ "$state" = "false" ]; then
-            echo "::error::Release $TAG already exists and is published; refusing to overwrite"
-            exit 1
-          fi
-          RUN_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-          gh release create "$TAG" \
-            --draft \
-            --target "$GITHUB_SHA" \
-            --title "VCMI $TAG" \
-            --notes "$(cat .github/release_notes.md.template)$(printf '\n\nBuilt by [Actions run #%s](%s).\n' "$GITHUB_RUN_ID" "$RUN_URL")" \
-            release/*
+    # - name: Upload build to download.vcmi.eu
+    #   id: upload_build
+    #   if: ${{ matrix.upload == 1 && github.event.number == '' && env.BUILDS_UPLOADER_PRIVATE_KEY != '' }}
+    #   run: |
+    #     if [ -z '${{ env.ANDROID_APK_PATH }}' ] ; then
+    #       cd "$BUILD_DIR"
+    #     fi
+    #     source '${{github.workspace}}/CI/upload_package.sh'
+    #   env:
+    #     BUILDS_UPLOADER_PRIVATE_KEY: ${{ secrets.BUILDS_UPLOADER_PRIVATE_KEY }}
+    #     PACKAGE_EXTENSION: ${{ matrix.extension }}
+
+    # - name: Prepare update information
+    #   if: ${{ steps.upload_build.outcome == 'success' }}
+    #   run: |
+    #     python3 CI/build_manifest.py file "$BUILD_DIR/${{ env.VCMI_PACKAGE_FILE_NAME }}.${{ matrix.extension }}" '${{ matrix.update_platform }}' package
+
+    # - name: Upload update information
+    #   if: ${{ steps.upload_build.outcome == 'success' }}
+    #   uses: actions/upload-artifact@v7
+    #   with:
+    #     name: update-info-${{ matrix.update_platform }}-package
+    #     path: .update-info/${{ matrix.update_platform }}-package.json
+
+    # - name: Prepare partial JSON with build informations
+    #   id: make_partial_json
+    #   env:
+    #     PLATFORM: ${{ matrix.platform }}
+    #     ARTIFACT_URL: ${{ steps.upload_artifact.outputs.artifact-url }}
+    #     DEBUG_SYMBOLS_URL: ${{ steps.upload_symbols.outputs.artifact-url }}
+    #     AAB_URL: ${{ steps.upload_aab.outputs.artifact-url }}
+    #   run: |
+    #     python3 CI/emit_partial.py
+
+    # - name: Upload partial JSON with build informations
+    #   uses: actions/upload-artifact@v7
+    #   with:
+    #     name: partial-json-${{ matrix.platform }}
+    #     path: .summary/${{ matrix.platform }}.json
+
+  # upload-source-package:
+  #   name: Upload Source Code Package
+  #   if: always() && github.event.number == ''
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #       - uses: actions/checkout@v7
+  #         with:
+  #           submodules: recursive
+
+  #       - name: Build Number
+  #         run: |
+  #           source '${{github.workspace}}/CI/get_package_name.sh'
+  #           echo VCMI_PACKAGE_FILE_NAME="$VCMI_PACKAGE_FILE_NAME" >> $GITHUB_ENV
+
+  #       - name: Create source code archive (including submodules)
+  #         run: |
+  #           git archive HEAD -o "release.tar" --worktree-attributes -v
+  #           git submodule update --init --recursive
+  #           git submodule --quiet foreach 'cd "$toplevel"; tar -rvf "release.tar" "$sm_path"'
+  #           gzip release.tar
+
+  #       - name: Upload source code archive
+  #         id: upload_source
+  #         uses: actions/upload-artifact@v7
+  #         with:
+  #           archive: false
+  #           path: |
+  #             ./release.tar.gz
+
+  #       - name: Prepare partial JSON with source informations
+  #         shell: bash
+  #         run: |
+  #           mkdir -p .summary
+  #           cat > .summary/source.json <<JSON
+  #           {"source_url": "${{ steps.upload_source.outputs.artifact-url }}"}
+  #           JSON
+
+  #       - name: Upload partial JSON with source informations
+  #         uses: actions/upload-artifact@v7
+  #         with:
+  #           name: partial-json-source
+  #           path: .summary/source.json
+
+  # test:
+  #   name: Build+Test (${{ matrix.platform }})
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       include:
+  #         - platform: gcc-latest-release
+  #           os: ubuntu-26.04
+  #           before_install: linux_qt6.sh
+  #           compiler_cxx: g++-15
+  #           compiler_cc: gcc-15
+  #           preset: linux-gcc-test
+
+  #         - platform: clang-latest-debug
+  #           os: ubuntu-26.04
+  #           before_install: linux_qt6.sh
+  #           compiler_cxx: clang++-22
+  #           compiler_cc: clang-22
+  #           preset: linux-clang-debug
+
+  #         - platform: gcc-oldest-debug
+  #           os: ubuntu-22.04
+  #           before_install: linux_qt5.sh
+  #           compiler_cxx: g++-10
+  #           compiler_cc: gcc-10
+  #           preset: linux-gcc-debug
+
+  #         - platform: clang-oldest-release
+  #           os: ubuntu-24.04
+  #           before_install: linux_qt5.sh
+  #           compiler_cxx: clang++-16
+  #           compiler_cc: clang-16
+  #           preset: linux-clang-test
+
+  #   runs-on: ${{ matrix.os }}
+  #   env:
+  #     BUILD_DIR: ${{ github.workspace }}/out/build/${{ matrix.preset }}
+
+  #   steps:
+  #   - name: Checkout repository
+  #     uses: actions/checkout@v7
+  #     with:
+  #       submodules: recursive
+
+  #   - name: Prepare APT staging dir
+  #     if: contains(matrix.os, 'ubuntu')
+  #     run: mkdir -p "$RUNNER_TEMP/apt-cache"
+
+  #   - name: APT cache restore
+  #     if: contains(matrix.os, 'ubuntu')
+  #     id: aptcache
+  #     uses: actions/cache/restore@v6
+  #     with:
+  #       path: ${{ runner.temp }}/apt-cache
+  #       key: ${{ matrix.platform }}-apt-${{ matrix.os }}
+  #       restore-keys: |
+  #         ${{ matrix.platform }}-apt-${{ matrix.os }}
+
+  #   - name: Prepare CI
+  #     run: source '${{ github.workspace }}/CI/before_install/${{ matrix.before_install }}'
+
+  #   - name: APT cache save
+  #     if: contains(matrix.os, 'ubuntu') && steps.aptcache.outputs.cache-hit != 'true'
+  #     uses: actions/cache/save@v6
+  #     with:
+  #       path: ${{ runner.temp }}/apt-cache
+  #       key: ${{ steps.aptcache.outputs.cache-primary-key }}
+
+  #   - name: Setup compiler cache for PRs
+  #     uses: step-security/ccache-action@v1
+  #     if: ${{ github.event.number != '' }}
+  #     with:
+  #       key: ${{ matrix.platform }}-PR-${{ github.event.number }}
+  #       restore-keys: |
+  #         ${{ matrix.platform }}-PR-${{ github.event.number }}
+  #         ${{ matrix.platform }}-branch-${{ github.base_ref }}
+  #         ${{ matrix.platform }}-
+  #       max-size: '5G'
+  #       verbose: 2
+  #       job-summary: ""
+
+  #   - name: Setup compiler cache for branch builds
+  #     uses: step-security/ccache-action@v1
+  #     if: ${{ github.event.number == '' }}
+  #     with:
+  #       key: ${{ matrix.platform }}-branch-${{ github.ref_name }}
+  #       restore-keys: |
+  #         ${{ matrix.platform }}-branch-${{ github.ref_name }}
+  #         ${{ matrix.platform }}-
+  #       max-size: '5G'
+  #       verbose: 2
+  #       job-summary: ""
+
+  #   - name: Prepare Heroes 3 data
+  #     run: |
+  #       data_url="https://github.com/vcmi-mods/vcmi-test-data/releases/download/v2.0/heroes3.7z"
+  #       wget --progress=dot:giga "$data_url" -O heroes3.7z
+  #       mkdir -p ~/.local/share/vcmi/
+  #       7za x -o"$HOME/.local/share/vcmi/" heroes3.7z
+
+  #   - name: Configure
+  #     run: |
+  #       cmake -DENABLE_CCACHE:BOOL=ON -DCMAKE_C_COMPILER=${{ matrix.compiler_cc }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler_cxx }} --preset ${{ matrix.preset }}
+
+  #   - name: Build
+  #     run: |
+  #       cmake --build --preset ${{matrix.preset}}
+
+  #   - name: Test
+  #     run: |
+  #       ctest --preset ${{matrix.preset}}
+
+  #   - name: Validate library startup
+  #     run: |
+  #       cd "$BUILD_DIR/bin"
+  #       ./vcmiserver --dummy-run 2> >(tee error.log)
+  #       if [ ! -s error.log ]; then
+  #           echo "Validation OK!"
+  #           exit 0
+  #       else
+  #           echo "Validation failed!"
+  #           exit 1
+  #       fi
+
+  #   - name: Prepare partial JSON with test cache information
+  #     if: always()
+  #     env:
+  #       PLATFORM: ${{ matrix.platform }}
+  #       PYTHONPATH: ${{ github.workspace }}/CI
+  #     run: |
+  #       python3 CI/emit_test_partial.py
+
+  #   - name: Upload partial JSON with test cache information
+  #     if: always()
+  #     uses: actions/upload-artifact@v7
+  #     with:
+  #       name: partial-json-test-${{ matrix.platform }}
+  #       path: .summary/test-${{ matrix.platform }}.json
+
+  # lobby:
+  #   name: Build VCMI Lobby
+  #   # Warning: Lobby .deb must be build on the same Ubuntu version and arch as our server. Do not change to ubuntu-latest
+  #   runs-on: ubuntu-24.04
+
+  #   steps:
+  #   - name: Checkout repository
+  #     uses: actions/checkout@v7
+
+  #   - name: Prepare CI
+  #     run: sudo apt update && sudo apt install devscripts debhelper build-essential cmake zlib1g-dev libboost-dev libboost-date-time-dev libboost-program-options-dev libboost-filesystem-dev libboost-iostreams-dev libminizip-dev libsqlite3-dev 
+
+  #   - name: Build Number
+  #     run: |
+  #       source '${{github.workspace}}/CI/get_package_name.sh'
+  #       VCMI_PACKAGE_FILE_NAME+="-x64"
+  #       echo VCMI_PACKAGE_FILE_NAME="$VCMI_PACKAGE_FILE_NAME" >> $GITHUB_ENV
+  #       echo VCMI_PACKAGE_BUILD="$VCMI_PACKAGE_BUILD" >> $GITHUB_ENV
+  #       echo VCMI_PACKAGE_NAME_SUFFIX="$VCMI_PACKAGE_NAME_SUFFIX" >> $GITHUB_ENV
+  #       echo VCMI_PACKAGE_GOLDMASTER="$VCMI_PACKAGE_GOLDMASTER" >> $GITHUB_ENV
+  #       echo VCMI_PACKAGE_UPDATE_CHANNEL="$VCMI_PACKAGE_UPDATE_CHANNEL" >> $GITHUB_ENV
+  #     env:
+  #       PULL_REQUEST: ${{ github.event.pull_request.number }}
+
+  #   - name: Prepare debian directory
+  #     run: cp -r packaging/ubuntu debian && cp -r packaging/ubuntu-lobby/. debian/
+
+  #   - name: Build .deb
+  #     run: debuild -us -uc -b
+
+  #   - name: Move .deb package
+  #     run: mv ../vcmi-lobby_*_amd64.deb "${{ env.VCMI_PACKAGE_FILE_NAME }}.deb"
+
+  #   - name: Upload Artifact
+  #     id: upload_artifact
+  #     uses: actions/upload-artifact@v7
+  #     with:
+  #       archive: false
+  #       path: ${{github.workspace}}/${{ env.VCMI_PACKAGE_FILE_NAME }}.deb
+
+  # updates:
+  #   name: Build VCMI Update Service
+  #   # Same Ubuntu version as the server that hosts updates.vcmi.eu
+  #   runs-on: ubuntu-26.04
+
+  #   steps:
+  #   - name: Checkout repository
+  #     uses: actions/checkout@v7
+
+  #   - name: Prepare CI
+  #     run: sudo apt update && sudo apt install devscripts debhelper build-essential python3
+
+  #   - name: Build Number
+  #     run: |
+  #       source '${{github.workspace}}/CI/get_package_name.sh'
+  #       VCMI_PACKAGE_FILE_NAME+="-updates"
+  #       echo VCMI_PACKAGE_FILE_NAME="$VCMI_PACKAGE_FILE_NAME" >> $GITHUB_ENV
+  #     env:
+  #       PULL_REQUEST: ${{ github.event.pull_request.number }}
+
+  #   - name: Prepare debian directory
+  #     run: cp -r packaging/ubuntu-updates debian
+
+  #   # Also runs the unit tests in updates/tests
+  #   - name: Build .deb
+  #     run: debuild -us -uc -b
+
+  #   - name: Move .deb package
+  #     run: mv ../vcmi-updates_*_all.deb "${{ env.VCMI_PACKAGE_FILE_NAME }}.deb"
+
+  #   - name: Upload Artifact
+  #     uses: actions/upload-artifact@v7
+  #     with:
+  #       archive: false
+  #       path: ${{github.workspace}}/${{ env.VCMI_PACKAGE_FILE_NAME }}.deb
+
+  # windows-installer:
+  #   needs: build
+  #   if: ${{ needs.build.result == 'success' }}
+  #   name: Create Windows Installer (${{ matrix.arch }})
+  #   strategy:
+  #     matrix:
+  #       include:
+  #         - platform: msvc-x64
+  #           arch: x64
+  #           os: windows-2025
+  #           update_platform: windows-x64
+
+  #         - platform: msvc-x86
+  #           arch: x86
+  #           os: windows-2025
+  #           update_platform: windows-x86
+
+  #         - platform: msvc-arm64
+  #           arch: arm64
+  #           os: windows-11-arm
+  #           update_platform: windows-arm64
+
+  #   runs-on: ${{ matrix.os }}
+
+  #   steps:
+  #   - name: Checkout repository
+  #     uses: actions/checkout@v7
+  #     with:
+  #       submodules: recursive
+
+  #   - name: Extract version info
+  #     id: extract-version
+  #     run: |
+  #       filePath="${GITHUB_WORKSPACE}/cmake_modules/VersionDefinition.cmake"
+
+  #       major=$(grep -m 1 "VCMI_VERSION_MAJOR" "$filePath" | tr -d -c 0-9)
+  #       minor=$(grep -m 1 "VCMI_VERSION_MINOR" "$filePath" | tr -d -c 0-9)
+  #       patch=$(grep -m 1 "VCMI_VERSION_PATCH" "$filePath" | tr -d -c 0-9)
+
+  #       short_version="${major}.${minor}.${patch}"
+  #       version_timestamp=$(date +"%Y%m%d%H%M%S")
+
+  #       echo "short_version=${short_version}" >> "$GITHUB_OUTPUT"
+  #       echo "version_timestamp=${version_timestamp}" >> "$GITHUB_OUTPUT"
+
+  #   - name: Download UCRT
+  #     run: source '${{github.workspace}}/CI/wininstaller/download_ucrt.sh' '${{matrix.platform}}'
+
+  #   - name: Build Number
+  #     run: |
+  #       source '${{github.workspace}}/CI/get_package_name.sh'
+  #       VCMI_PACKAGE_FILE_NAME+="-${{ matrix.arch }}"
+  #       echo VCMI_PACKAGE_FILE_NAME="$VCMI_PACKAGE_FILE_NAME" >> $GITHUB_ENV
+  #       echo VCMI_PACKAGE_BUILD="$VCMI_PACKAGE_BUILD" >> $GITHUB_ENV
+  #       echo VCMI_PACKAGE_NAME_SUFFIX="$VCMI_PACKAGE_NAME_SUFFIX" >> $GITHUB_ENV
+  #       echo VCMI_PACKAGE_GOLDMASTER="$VCMI_PACKAGE_GOLDMASTER" >> $GITHUB_ENV
+  #       echo VCMI_PACKAGE_UPDATE_CHANNEL="$VCMI_PACKAGE_UPDATE_CHANNEL" >> $GITHUB_ENV
+  #     env:
+  #       PULL_REQUEST: ${{ github.event.pull_request.number }}
+
+  #   - name: Download Artifact
+  #     uses: actions/download-artifact@v8
+  #     with:
+  #       name: ${{ env.VCMI_PACKAGE_FILE_NAME }}.zip
+  #       path: ${{github.workspace}}/artifact
+
+  #   - name: Ensure Inno Setup is installed
+  #     run: |
+  #       if [ ! -f "/c/Program Files (x86)/Inno Setup 6/ISCC.exe" ] && [ ! -f "/c/ProgramData/Chocolatey/bin/ISCC.exe" ]; then
+  #         choco install innosetup --no-progress -y
+  #       fi
+
+  #   - name: Build VCMI Installer
+  #     run: >
+  #       CI\wininstaller\build_installer.cmd
+  #       "${{ steps.extract-version.outputs.short_version }}"
+  #       "${{ env.VCMI_PACKAGE_BUILD }}"
+  #       "${{ matrix.arch }}"
+  #       "VCMI ${{ env.VCMI_PACKAGE_NAME_SUFFIX }}"
+  #       "${{ env.VCMI_PACKAGE_FILE_NAME }}"
+  #       "${{ github.workspace }}\artifact"
+  #       "${{ github.workspace }}\ucrt"
+  #     shell: cmd
+
+  #   - name: Upload VCMI Installer Artifacts
+  #     id: upload_installer
+  #     uses: actions/upload-artifact@v7
+  #     with:
+  #       archive: false
+  #       path: |
+  #         ${{ github.workspace }}/CI/wininstaller/Output/*.exe
+
+  #   - name: Upload Installer
+  #     id: upload_installer_build
+  #     if: ${{ github.event.number == '' && env.BUILDS_UPLOADER_PRIVATE_KEY != '' }}
+  #     run: |
+  #       cd '${{github.workspace}}/CI/wininstaller/Output'
+  #       source '${{github.workspace}}/CI/upload_package.sh'
+  #     env:
+  #       BUILDS_UPLOADER_PRIVATE_KEY: ${{ secrets.BUILDS_UPLOADER_PRIVATE_KEY }}
+  #       PACKAGE_EXTENSION: exe
+
+  #   - name: Prepare update information
+  #     if: ${{ steps.upload_installer_build.outcome == 'success' }}
+  #     run: |
+  #       python3 CI/build_manifest.py file '${{github.workspace}}/CI/wininstaller/Output/${{ env.VCMI_PACKAGE_FILE_NAME }}.exe' '${{ matrix.update_platform }}' installer
+
+  #   - name: Upload update information
+  #     if: ${{ steps.upload_installer_build.outcome == 'success' }}
+  #     uses: actions/upload-artifact@v7
+  #     with:
+  #       name: update-info-${{ matrix.update_platform }}-installer
+  #       path: .update-info/${{ matrix.update_platform }}-installer.json
+
+  #   - name: Prepare partial JSON with installer informations
+  #     shell: bash
+  #     run: |
+  #       mkdir -p .summary
+  #       cat > .summary/installer-${{ matrix.platform }}.json <<JSON
+  #       {
+  #         "platform": "${{ matrix.platform }}",
+  #         "installer_url": "${{ steps.upload_installer.outputs.artifact-url }}"
+  #       }
+  #       JSON
+
+  #   - name: Upload partial JSON with installer informations
+  #     uses: actions/upload-artifact@v7
+  #     with:
+  #       name: partial-json-${{ matrix.platform }}-installer
+  #       path: .summary/installer-${{ matrix.platform }}.json
+
+  # validate-code:
+  #   name: Validate Code
+  #   if: always()
+  #   runs-on: ubuntu-24.04
+
+  #   steps:
+  #       - uses: actions/checkout@v7
+  #       - name: Ensure LF line endings
+  #         run: |
+  #           find . -path ./.git -prune -o -path ./AI/FuzzyLite -prune -o -path ./test/googletest \
+  #           -o -path ./osx  -prune -o -type f \
+  #           -not -name '*.png' -and -not -name '*.ttf' -and -not -name '*.wav' -and -not -name '*.webm' -and -not -name '*.ico' -and -not -name '*.bat' -and -not -name '*.cmd' -and -not -name '*.iss' -and -not -name '*.isl' -print0 | \
+  #           { ! xargs -0 grep -l -z -P '\r\n'; }
+
+  #       - name: Validate JSON
+  #         run: |
+  #           sudo apt install python3-jstyleson
+  #           python3 CI/validate_json.py
+
+  #       - name: Validate relative local includes
+  #         run: |
+  #           python3 CI/normalize_relative_includes.py --repo .
+
+  #       - name: Validate Markdown
+  #         uses: DavidAnson/markdownlint-cli2-action@v25.0.0
+  #         with:
+  #           config: 'CI/example.markdownlint-cli2.jsonc'
+  #           globs: '**/*.md'
+
+  # build-manifest:
+  #   name: Upload Build Manifest
+  #   # Runs after all uploads of this run, so that every build listed in the manifest is already on the server
+  #   needs: [build, windows-installer]
+  #   if: ${{ !cancelled() && github.event.number == '' }}
+  #   runs-on: ubuntu-latest
+  #   # Without the uploader key nothing was uploaded, so there is no update information and no manifest is created
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v7
+
+  #     - name: Download update information
+  #       uses: actions/download-artifact@v8
+  #       with:
+  #         pattern: update-info-*
+  #         merge-multiple: true
+  #         path: update-info
+
+  #     - name: Build Number
+  #       run: |
+  #         source '${{github.workspace}}/CI/get_package_name.sh'
+  #         echo VCMI_PACKAGE_FILE_NAME="$VCMI_PACKAGE_FILE_NAME" >> $GITHUB_ENV
+  #       env:
+  #         PULL_REQUEST: ${{ github.event.pull_request.number }}
+
+  #     - name: Create build manifest
+  #       run: python3 CI/build_manifest.py create update-info "${{ env.VCMI_PACKAGE_FILE_NAME }}.json"
+
+  #     - name: Upload build manifest to download.vcmi.eu
+  #       if: ${{ hashFiles(format('{0}.json', env.VCMI_PACKAGE_FILE_NAME)) != '' }}
+  #       run: source '${{github.workspace}}/CI/upload_package.sh'
+  #       env:
+  #         BUILDS_UPLOADER_PRIVATE_KEY: ${{ secrets.BUILDS_UPLOADER_PRIVATE_KEY }}
+  #         PACKAGE_EXTENSION: json
+
+  # final-summary:
+  #   name: Build report
+  #   if: always()
+  #   needs: [build, windows-installer, validate-code, test, upload-source-package]
+  #   runs-on: ubuntu-24.04
+  #   permissions:
+  #     contents: read
+  #     actions: write                   # Partial JSON artifacts can't be deleted in PRs
+  #   steps:
+  #     - name: Checkout (for script path)
+  #       uses: actions/checkout@v7
+  #       with:
+  #         sparse-checkout: |
+  #           CI/final_summary.py
+
+  #     - name: Download all partial JSON artifacts
+  #       continue-on-error: true
+  #       uses: actions/download-artifact@v8
+  #       with:
+  #         pattern: partial-json-*
+  #         merge-multiple: true
+  #         path: partials
+
+  #     - name: Run final summary
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       run: |
+  #         python3 CI/final_summary.py
+
+  # draft-release:
+  #   name: Create draft release
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+  #   needs: [build, windows-installer, upload-source-package]
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: write
+  #   steps:
+  #     - uses: actions/checkout@v7
+
+  #     - name: Extract version
+  #       id: version
+  #       run: |
+  #         f=cmake_modules/VersionDefinition.cmake
+  #         major=$(grep -m1 VCMI_VERSION_MAJOR "$f" | tr -dc 0-9)
+  #         minor=$(grep -m1 VCMI_VERSION_MINOR "$f" | tr -dc 0-9)
+  #         patch=$(grep -m1 VCMI_VERSION_PATCH "$f" | tr -dc 0-9)
+  #         if [ "$patch" = "0" ]; then tag="${major}.${minor}"; else tag="${major}.${minor}.${patch}"; fi
+  #         echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+  #     - name: Download all artifacts
+  #       uses: actions/download-artifact@v8
+  #       with:
+  #         path: dl
+
+  #     - name: Stage release assets
+  #       run: |
+  #         set -euo pipefail
+  #         mkdir release
+  #         for d in dl/*/; do
+  #           name=$(basename "$d")
+  #           case "$name" in
+  #             partial-json-*) continue ;;
+  #             *-msvc-x64-symbols)   (cd "$d" && zip -qr9 "$GITHUB_WORKSPACE/release/VCMI-Windows-x64-symbols.zip" .) ;;
+  #             *-msvc-x86-symbols)   (cd "$d" && zip -qr9 "$GITHUB_WORKSPACE/release/VCMI-Windows-x86-symbols.zip" .) ;;
+  #             *-msvc-arm64-symbols) (cd "$d" && zip -qr9 "$GITHUB_WORKSPACE/release/VCMI-Windows-arm64-symbols.zip" .) ;;
+  #             *)
+  #               for f in "$d"*; do
+  #                 [ -f "$f" ] || continue
+  #                 case "$(basename "$f")" in
+  #                   *-intel.dmg)       mv "$f" release/VCMI-macOS-intel.dmg ;;
+  #                   *-arm.dmg)         mv "$f" release/VCMI-macOS-arm.dmg ;;
+  #                   *.ipa)             mv "$f" release/VCMI-iOS.ipa ;;
+  #                   *-x64.zip)         mv "$f" release/VCMI-Windows.zip ;;
+  #                   *-x64.exe)         mv "$f" release/VCMI-Windows-x64.exe ;;
+  #                   *-x86.exe)         mv "$f" release/VCMI-Windows-x86.exe ;;
+  #                   *-arm64.exe)       mv "$f" release/VCMI-Windows-arm64.exe ;;
+  #                   *-armeabi-v7a.apk) mv "$f" release/VCMI-Android-armeabi-v7a.apk ;;
+  #                   *-arm64-v8a.apk)   mv "$f" release/VCMI-Android-arm64-v8a.apk ;;
+  #                   *-x64.apk)         mv "$f" release/VCMI-Android-x86_64.apk ;;
+  #                   *-armeabi-v7a.aab) mv "$f" release/VCMI-Android-armeabi-v7a.aab ;;
+  #                   *-arm64-v8a.aab)   mv "$f" release/VCMI-Android-arm64-v8a.aab ;;
+  #                   *-x64.aab)         mv "$f" release/VCMI-Android-x86_64.aab ;;
+  #                   *-x86_64.AppImage) mv "$f" release/VCMI-Linux-x64.AppImage ;;
+  #                   *-arm64.AppImage)  mv "$f" release/VCMI-Linux-arm64.AppImage ;;
+  #                   release.tar.gz)    mv "$f" release/VCMI-Sources.tar.gz ;;
+  #                 esac
+  #               done
+  #               ;;
+  #           esac
+  #         done
+  #         ls -la release
+
+  #     - name: Refresh draft release
+  #       env:
+  #         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         TAG: ${{ steps.version.outputs.tag }}
+  #       run: |
+  #         state=$(gh release view "$TAG" --json isDraft -q .isDraft 2>/dev/null || echo missing)
+  #         if [ "$state" = "true" ]; then
+  #           gh release delete "$TAG" --yes
+  #         elif [ "$state" = "false" ]; then
+  #           echo "::error::Release $TAG already exists and is published; refusing to overwrite"
+  #           exit 1
+  #         fi
+  #         RUN_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+  #         gh release create "$TAG" \
+  #           --draft \
+  #           --target "$GITHUB_SHA" \
+  #           --title "VCMI $TAG" \
+  #           --notes "$(cat .github/release_notes.md.template)$(printf '\n\nBuilt by [Actions run #%s](%s).\n' "$GITHUB_RUN_ID" "$RUN_URL")" \
+  #           release/*
